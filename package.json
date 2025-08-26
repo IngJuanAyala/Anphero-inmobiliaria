@@ -2,7 +2,7 @@
   "name": "finca-raiz-anphero",
   "version": "1.0.0",
   "description": "Sitio web moderno para Anphero Inmobiliaria",
-  "homepage": "https://ingjuanayala.github.io/Amphero-inmobiliaria",
+  "homepage": ".",
   "main": "index.js",
   "scripts": {
     "start": "react-scripts start",
