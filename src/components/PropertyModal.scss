@@ -1,0 +1,301 @@
+@import '../styles/index.scss';
+
+.property-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  backdrop-filter: blur(5px);
+
+  .modal-content {
+    background: $white;
+    border-radius: 1rem;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: modalSlideIn 0.3s ease-out;
+
+    @media (max-width: $mobile) {
+      max-height: 95vh;
+      margin: 0.5rem;
+    }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(0, 0, 0, 0.5);
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    color: $white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.7);
+      transform: scale(1.1);
+    }
+  }
+
+  .modal-header {
+    .property-image {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      border-radius: 1rem 1rem 0 0;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .property-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: $accent-color;
+        color: $white;
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+
+        i {
+          color: $white;
+        }
+      }
+    }
+  }
+
+  .modal-body {
+    padding: 2rem;
+
+    @media (max-width: $mobile) {
+      padding: 1.5rem;
+    }
+
+    .property-title {
+      text-align: center;
+      margin-bottom: 2rem;
+
+      h2 {
+        font-family: $font-heading;
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: $text-dark;
+        margin-bottom: 1rem;
+        line-height: 1.3;
+
+        @media (max-width: $mobile) {
+          font-size: 1.5rem;
+        }
+      }
+
+      .property-price {
+        .price-amount {
+          display: block;
+          font-family: $font-heading;
+          font-size: 2.5rem;
+          font-weight: 700;
+          color: $accent-color;
+          margin-bottom: 0.5rem;
+
+          @media (max-width: $mobile) {
+            font-size: 2rem;
+          }
+        }
+
+        .price-note {
+          font-size: 1rem;
+          color: $text-light;
+          font-weight: 500;
+        }
+      }
+    }
+
+    .property-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+
+      @media (max-width: $mobile) {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+
+      .btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        font-weight: 600;
+        min-width: 200px;
+
+        @media (max-width: $mobile) {
+          min-width: auto;
+          width: 100%;
+        }
+
+        i {
+          margin-right: 0.5rem;
+        }
+      }
+    }
+
+    .property-details {
+      .details-section {
+        margin-bottom: 2rem;
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+
+        h3 {
+          font-family: $font-heading;
+          font-size: 1.3rem;
+          font-weight: 600;
+          color: $primary-color;
+          margin-bottom: 1rem;
+          padding-bottom: 0.5rem;
+          border-bottom: 2px solid $accent-color;
+        }
+
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 1rem;
+
+          @media (max-width: $mobile) {
+            grid-template-columns: 1fr;
+            gap: 0.75rem;
+          }
+
+          .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: $light-gray;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background: lighten($accent-color, 45%);
+              transform: translateX(5px);
+            }
+
+            i {
+              color: $accent-color;
+              font-size: 1rem;
+              flex-shrink: 0;
+            }
+
+            span {
+              font-weight: 500;
+              color: $text-dark;
+            }
+          }
+        }
+
+        .requirements-list {
+          .requirement-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: $light-gray;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background: lighten($accent-color, 45%);
+              transform: translateX(5px);
+            }
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            i {
+              color: $accent-color;
+              font-size: 1rem;
+              flex-shrink: 0;
+            }
+
+            span {
+              font-weight: 500;
+              color: $text-dark;
+            }
+          }
+        }
+
+        .contact-info {
+          .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem;
+            background: $light-gray;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+
+            &:hover {
+              background: lighten($accent-color, 45%);
+              transform: translateX(5px);
+            }
+
+            &:last-child {
+              margin-bottom: 0;
+            }
+
+            i {
+              color: $accent-color;
+              font-size: 1rem;
+              flex-shrink: 0;
+              width: 20px;
+              text-align: center;
+            }
+
+            span {
+              font-weight: 500;
+              color: $text-dark;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
