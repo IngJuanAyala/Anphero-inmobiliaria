@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Fondo negro -->
+  <rect width="32" height="32" fill="#000000"/>
+  
+  <!-- Casa corporativa dorada -->
+  <g fill="#d4af37">
+    <!-- Techo principal con estilo moderno -->
+    <polygon points="4,16 16,6 28,16" fill="#d4af37"/>
+    
+    <!-- Cuerpo de la casa -->
+    <rect x="4" y="16" width="24" height="16" fill="#d4af37"/>
+    
+    <!-- Línea decorativa del techo -->
+    <line x1="8" y1="12" x2="24" y2="12" stroke="#000000" stroke-width="1"/>
+    
+    <!-- Puerta principal -->
+    <rect x="12" y="24" width="8" height="8" fill="#000000"/>
+    
+    <!-- Ventanas laterales -->
+    <rect x="6" y="18" width="6" height="6" fill="#000000"/>
+    <rect x="20" y="18" width="6" height="6" fill="#000000"/>
+    
+    <!-- Chimenea moderna -->
+    <rect x="22" y="8" width="4" height="10" fill="#d4af37"/>
+    
+    <!-- Detalle de la chimenea -->
+    <rect x="21" y="6" width="6" height="2" fill="#d4af37"/>
+  </g>
+</svg>

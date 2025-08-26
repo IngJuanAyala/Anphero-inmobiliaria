@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <!-- Fondo negro -->
+  <rect width="32" height="32" fill="#000000"/>
+  
+  <!-- Casa con corona dorada basada en el logo oficial -->
+  <g fill="#d4af37">
+    <!-- Corona -->
+    <polygon points="8,8 12,4 16,6 20,4 24,8 22,10 10,10" fill="#d4af37"/>
+    
+    <!-- Techo de la casa -->
+    <polygon points="6,12 16,6 26,12" fill="#d4af37"/>
+    
+    <!-- Cuerpo de la casa -->
+    <rect x="6" y="12" width="20" height="16" fill="#d4af37"/>
+    
+    <!-- Puerta -->
+    <rect x="12" y="22" width="8" height="6" fill="#000000"/>
+    
+    <!-- Ventanas -->
+    <rect x="8" y="16" width="6" height="6" fill="#000000"/>
+    <rect x="18" y="16" width="6" height="6" fill="#000000"/>
+    
+    <!-- Chimenea -->
+    <rect x="20" y="8" width="4" height="6" fill="#d4af37"/>
+  </g>
+</svg>

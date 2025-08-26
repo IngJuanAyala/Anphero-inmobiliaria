@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="200" height="150">
+  <!-- Casa dorada con corona y edificios de fondo -->
+  <g fill="#d4af37" stroke="#d4af37" stroke-width="1">
+    <!-- Edificios de fondo (más pequeños y sutiles) -->
+    <g opacity="0.6">
+      <!-- Edificio 1 (izquierda) -->
+      <rect x="20" y="80" width="25" height="60" fill="none"/>
+      <line x1="20" y1="90" x2="45" y2="90" stroke="#d4af37" stroke-width="1"/>
+      <line x1="20" y1="100" x2="45" y2="100" stroke="#d4af37" stroke-width="1"/>
+      <line x1="20" y1="110" x2="45" y2="110" stroke="#d4af37" stroke-width="1"/>
+      
+      <!-- Edificio 2 (derecha) -->
+      <rect x="155" y="70" width="25" height="70" fill="none"/>
+      <line x1="155" y1="80" x2="180" y2="80" stroke="#d4af37" stroke-width="1"/>
+      <line x1="155" y1="90" x2="180" y2="90" stroke="#d4af37" stroke-width="1"/>
+      <line x1="155" y1="100" x2="180" y2="100" stroke="#d4af37" stroke-width="1"/>
+      <line x1="155" y1="110" x2="180" y2="110" stroke="#d4af37" stroke-width="1"/>
+      
+      <!-- Edificio 3 (centro-derecha) -->
+      <rect x="130" y="75" width="20" height="65" fill="none"/>
+      <line x1="130" y1="85" x2="150" y2="85" stroke="#d4af37" stroke-width="1"/>
+      <line x1="130" y1="95" x2="150" y2="95" stroke="#d4af37" stroke-width="1"/>
+      <line x1="130" y1="105" x2="150" y2="105" stroke="#d4af37" stroke-width="1"/>
+    </g>
+    
+    <!-- Casa principal con corona -->
+    <!-- Corona -->
+    <polygon points="60,40 80,20 100,30 120,20 140,40 130,50 70,50" fill="#d4af37"/>
+    
+    <!-- Techo de la casa -->
+    <polygon points="50,60 100,35 150,60" fill="#d4af37"/>
+    
+    <!-- Cuerpo de la casa -->
+    <rect x="50" y="60" width="100" height="70" fill="#d4af37"/>
+    
+    <!-- Líneas horizontales del cuerpo de la casa (textura de troncos) -->
+    <line x1="50" y1="70" x2="150" y2="70" stroke="#000000" stroke-width="1"/>
+    <line x1="50" y1="80" x2="150" y2="80" stroke="#000000" stroke-width="1"/>
+    <line x1="50" y1="90" x2="150" y2="90" stroke="#000000" stroke-width="1"/>
+    <line x1="50" y1="100" x2="150" y2="100" stroke="#000000" stroke-width="1"/>
+    <line x1="50" y1="110" x2="150" y2="110" stroke="#000000" stroke-width="1"/>
+    
+    <!-- Puerta -->
+    <rect x="85" y="105" width="30" height="25" fill="#000000"/>
+    
+    <!-- Ventana izquierda -->
+    <rect x="60" y="75" width="20" height="20" fill="#000000"/>
+    <line x1="60" y1="85" x2="80" y2="85" stroke="#d4af37" stroke-width="1"/>
+    <line x1="70" y1="75" x2="70" y2="95" stroke="#d4af37" stroke-width="1"/>
+    
+    <!-- Ventana derecha -->
+    <rect x="120" y="75" width="20" height="20" fill="#000000"/>
+    <line x1="120" y1="85" x2="140" y2="85" stroke="#d4af37" stroke-width="1"/>
+    <line x1="130" y1="75" x2="130" y2="95" stroke="#d4af37" stroke-width="1"/>
+    
+    <!-- Chimenea -->
+    <rect x="125" y="30" width="15" height="35" fill="#d4af37"/>
+    
+    <!-- Detalles de la corona -->
+    <circle cx="80" cy="25" r="2" fill="#000000"/>
+    <circle cx="100" cy="25" r="2" fill="#000000"/>
+    <circle cx="120" cy="25" r="2" fill="#000000"/>
+  </g>
+</svg>

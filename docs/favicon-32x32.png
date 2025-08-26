@@ -1,0 +1,16 @@
+Este archivo debe ser reemplazado con un favicon PNG de 32x32 píxeles
+que represente el logo de Anphero Inmobiliaria.
+
+El favicon debe contener:
+- Fondo negro (#000000)
+- Texto "ANPHERO" en dorado (#d4af37)
+- Una pequeña casa dorada arriba del texto
+- Resolución: 32x32 píxeles
+
+Para crear el favicon real:
+1. Usar el archivo SVG favicon.svg como base
+2. Convertir a PNG de 32x32 píxeles
+3. Reemplazar este archivo
+
+El favicon SVG ya está creado y funcionando en el navegador.
+

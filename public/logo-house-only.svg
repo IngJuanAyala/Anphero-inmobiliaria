@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 120" width="200" height="120">
+  <!-- Casa dorada con corona y edificios - réplica exacta del logo original -->
+  <g fill="#d4af37" stroke="#d4af37" stroke-width="1">
+    <!-- Edificios de fondo (sutiles) -->
+    <g opacity="0.7">
+      <!-- Edificio izquierdo -->
+      <rect x="15" y="70" width="20" height="50" fill="none"/>
+      <line x1="15" y1="80" x2="35" y2="80" stroke="#d4af37" stroke-width="0.5"/>
+      <line x1="15" y1="90" x2="35" y2="90" stroke="#d4af37" stroke-width="0.5"/>
+      <line x1="15" y1="100" x2="35" y2="100" stroke="#d4af37" stroke-width="0.5"/>
+      
+      <!-- Edificio derecho -->
+      <rect x="165" y="65" width="20" height="55" fill="none"/>
+      <line x1="165" y1="75" x2="185" y2="75" stroke="#d4af37" stroke-width="0.5"/>
+      <line x1="165" y1="85" x2="185" y2="85" stroke="#d4af37" stroke-width="0.5"/>
+      <line x1="165" y1="95" x2="185" y2="95" stroke="#d4af37" stroke-width="0.5"/>
+      <line x1="165" y1="105" x2="185" y2="105" stroke="#d4af37" stroke-width="0.5"/>
+    </g>
+    
+    <!-- Casa principal con corona -->
+    <!-- Corona -->
+    <polygon points="70,35 85,20 100,28 115,20 130,35 120,42 80,42" fill="#d4af37"/>
+    
+    <!-- Techo de la casa -->
+    <polygon points="60,50 100,30 140,50" fill="#d4af37"/>
+    
+    <!-- Cuerpo de la casa -->
+    <rect x="60" y="50" width="80" height="60" fill="#d4af37"/>
+    
+    <!-- Líneas horizontales del cuerpo (textura de troncos) -->
+    <line x1="60" y1="60" x2="140" y2="60" stroke="#000000" stroke-width="1"/>
+    <line x1="60" y1="70" x2="140" y2="70" stroke="#000000" stroke-width="1"/>
+    <line x1="60" y1="80" x2="140" y2="80" stroke="#000000" stroke-width="1"/>
+    <line x1="60" y1="90" x2="140" y2="90" stroke="#000000" stroke-width="1"/>
+    <line x1="60" y1="100" x2="140" y2="100" stroke="#000000" stroke-width="1"/>
+    
+    <!-- Puerta -->
+    <rect x="85" y="95" width="30" height="15" fill="#000000"/>
+    
+    <!-- Ventana izquierda -->
+    <rect x="70" y="65" width="15" height="15" fill="#000000"/>
+    <line x1="70" y1="72.5" x2="85" y2="72.5" stroke="#d4af37" stroke-width="0.5"/>
+    <line x1="77.5" y1="65" x2="77.5" y2="80" stroke="#d4af37" stroke-width="0.5"/>
+    
+    <!-- Ventana derecha -->
+    <rect x="115" y="65" width="15" height="15" fill="#000000"/>
+    <line x1="115" y1="72.5" x2="130" y2="72.5" stroke="#d4af37" stroke-width="0.5"/>
+    <line x1="122.5" y1="65" x2="122.5" y2="80" stroke="#d4af37" stroke-width="0.5"/>
+    
+    <!-- Chimenea -->
+    <rect x="120" y="25" width="12" height="25" fill="#d4af37"/>
+  </g>
+</svg>

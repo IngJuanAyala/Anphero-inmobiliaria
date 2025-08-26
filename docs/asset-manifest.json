@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/Anphero-inmobiliaria/static/css/main.06bc018a.css",
+    "main.js": "/Anphero-inmobiliaria/static/js/main.58d800fd.js",
+    "index.html": "/Anphero-inmobiliaria/index.html",
+    "main.06bc018a.css.map": "/Anphero-inmobiliaria/static/css/main.06bc018a.css.map",
+    "main.58d800fd.js.map": "/Anphero-inmobiliaria/static/js/main.58d800fd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.06bc018a.css",
+    "static/js/main.58d800fd.js"
+  ]
+}
