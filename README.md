@@ -1,4 +1,4 @@
-# 🏠 Anphero Inmobiliaria - Sitio Web Moderno
+git co# 🏠 Anphero Inmobiliaria - Sitio Web Moderno
 
 Un sitio web moderno y profesional para Anphero Inmobiliaria, construido con React.js, SASS y las mejores prácticas de desarrollo web.
 
@@ -79,6 +79,36 @@ Un sitio web moderno y profesional para Anphero Inmobiliaria, construido con Rea
 - `npm run build` - Construye la aplicación para producción
 - `npm test` - Ejecuta las pruebas
 - `npm run eject` - Expone la configuración de webpack (irreversible)
+
+## 🚀 Despliegue
+
+### GitHub Pages (Manual)
+
+Este proyecto está configurado para desplegarse en GitHub Pages usando el paquete `gh-pages`. Para publicar actualizaciones, debes ejecutar el comando de despliegue manualmente.
+
+**URL del sitio desplegado**: https://ayalajg.github.io/Amphero-inmobiliaria
+
+### Configuración del Despliegue
+
+- **Script de despliegue**: `npm run deploy`
+- **Rama de despliegue**: `gh-pages` (generada automáticamente)
+- **Directorio de build**: `./build`
+- **Trigger**: Comando manual
+
+### Despliegue Manual
+
+Si necesitas desplegar manualmente:
+
+1. **Construir la aplicación**
+   ```bash
+   npm run build
+   ```
+
+2. **Subir a GitHub Pages**
+   ```bash
+   npm install -g gh-pages
+   gh-pages -d build
+   ```
 
 ## 🏗️ Estructura del Proyecto
 
