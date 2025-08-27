@@ -136,7 +136,7 @@ const Hero = () => {
         </div>
       </div>
       
-      <div className="hero__scroll-indicator">
+      <div className="hero__scroll-indicator" onClick={() => scrollToSection('about')}>
         <div className="scroll-indicator__text">Descubre más</div>
         <div className="scroll-indicator__arrow">
           <i className="fas fa-chevron-down"></i>
