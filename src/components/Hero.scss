@@ -606,5 +606,10 @@
         }
       }
     }
+
+    // Ocultar el indicador de scroll en móviles para evitar conflictos
+    &__scroll-indicator {
+      display: none;
+    }
   }
 }
