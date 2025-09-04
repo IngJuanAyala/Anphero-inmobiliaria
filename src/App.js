@@ -1,14 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Header from './components/Header';
-import Hero from './components/Hero';
-import About from './components/About';
-import Services from './components/Services';
-import Properties from './components/Properties';
-import HouseTour from './components/HouseTour';
-import Testimonials from './components/Testimonials';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
-import WhatsAppButton from './components/WhatsAppButton';
+import AppRouter from './AppRouter';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
@@ -39,22 +30,7 @@ function App() {
     );
   }
 
-  return (
-    <div className="App">
-      <Header />
-      <main>
-        <Hero />
-        <About />
-        <Services />
-        <Properties />
-        <HouseTour />
-        <Testimonials />
-        <Contact />
-      </main>
-      <Footer />
-      <WhatsAppButton />
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;
