@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getProperties, deleteProperty } from '../firebase/propertiesService';
+import { getAllProperties, deleteProperty } from '../firebase/propertiesService';
 import PropertyModal from './PropertyModal';
 import './PropertyAdmin.scss';
 
@@ -18,7 +18,7 @@ const PropertyAdmin = () => {
   const loadProperties = async () => {
     setLoading(true);
     try {
-      const data = await getProperties();
+      const data = await getAllProperties();
       setProperties(data);
     } catch (error) {
       console.error('Error cargando propiedades:', error);
@@ -95,14 +95,26 @@ const PropertyAdmin = () => {
       />
 
       <div className="properties-list">
-        <h3>Propiedades Activas ({properties.length})</h3>
+        <div className="properties-header">
+          <h3>Todas las Propiedades ({properties.length})</h3>
+          <div className="properties-stats">
+            <span className="stat-active">
+              <i className="fas fa-check-circle"></i>
+              Activas: {properties.filter(p => p.activo !== false).length}
+            </span>
+            <span className="stat-inactive">
+              <i className="fas fa-times-circle"></i>
+              Inactivas: {properties.filter(p => p.activo === false).length}
+            </span>
+          </div>
+        </div>
         
         {loading ? (
           <div className="loading">Cargando propiedades...</div>
         ) : (
           <div className="properties-grid">
             {properties.map((property) => (
-              <div key={property.id} className="property-card">
+              <div key={property.id} className={`property-card ${property.activo === false ? 'property-card--inactive' : ''}`}>
                 <div className="property-image">
                   {property.fotos && property.fotos.length > 0 ? (
                     <img src={property.fotos[0]} alt={property.titulo} />
@@ -110,6 +122,12 @@ const PropertyAdmin = () => {
                     <div className="no-image">
                       <i className="fas fa-image"></i>
                       <span>Sin imagen</span>
+                    </div>
+                  )}
+                  {property.activo === false && (
+                    <div className="inactive-overlay">
+                      <i className="fas fa-ban"></i>
+                      <span>INACTIVA</span>
                     </div>
                   )}
                 </div>
@@ -124,6 +142,12 @@ const PropertyAdmin = () => {
                     {formatPrice(property.precio)}
                   </p>
                   <div className="property-badges">
+                    {property.destacado && (
+                      <span className="badge badge--destacada">
+                        <i className="fas fa-star"></i>
+                        DESTACADA
+                      </span>
+                    )}
                     <span className={`badge badge--${property.tipo}`}>
                       {property.tipo}
                     </span>

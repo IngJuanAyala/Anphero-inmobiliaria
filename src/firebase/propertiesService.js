@@ -49,6 +49,34 @@ export const getProperties = async () => {
   }
 };
 
+// Obtener todas las propiedades (activas e inactivas) para administración
+export const getAllProperties = async () => {
+  try {
+    const propertiesRef = collection(db, 'properties');
+    const querySnapshot = await getDocs(propertiesRef);
+    const properties = [];
+    
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      properties.push({
+        id: doc.id,
+        ...data
+      });
+    });
+    
+    // Ordenar por fecha de creación si existe
+    return properties.sort((a, b) => {
+      if (a.fechaCreacion && b.fechaCreacion) {
+        return b.fechaCreacion.toDate() - a.fechaCreacion.toDate();
+      }
+      return 0;
+    });
+  } catch (error) {
+    console.error('Error obteniendo todas las propiedades:', error);
+    throw error;
+  }
+};
+
 // Obtener propiedades por tipo (casa/apartamento)
 export const getPropertiesByType = async (tipo) => {
   try {

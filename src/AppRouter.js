@@ -6,6 +6,7 @@ import About from './components/About';
 import Services from './components/Services';
 import Properties from './components/Properties';
 import PropertiesList from './components/PropertiesList';
+import FeaturedProperties from './components/FeaturedProperties';
 import HouseTour from './components/HouseTour';
 import Testimonials from './components/Testimonials';
 import Contact from './components/Contact';
@@ -22,6 +23,7 @@ const HomePage = () => {
       <About />
       <Services />
       <Properties />
+      <FeaturedProperties />
       <PropertiesList />
       <HouseTour />
       <Testimonials />

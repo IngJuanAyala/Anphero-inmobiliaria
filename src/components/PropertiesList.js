@@ -34,9 +34,23 @@ const PropertiesList = () => {
         filteredProperties = allProperties.filter(p => p.operacion === 'venta');
       }
       
+      // Ordenar: destacadas primero, luego por fecha
+      const sortedProperties = filteredProperties.sort((a, b) => {
+        // Primero las destacadas
+        if (a.destacado && !b.destacado) return -1;
+        if (!a.destacado && b.destacado) return 1;
+        
+        // Luego por fecha de creación
+        if (a.fechaCreacion && b.fechaCreacion) {
+          return b.fechaCreacion.toDate() - a.fechaCreacion.toDate();
+        }
+        return 0;
+      });
+
       console.log('Propiedades cargadas:', allProperties);
-      console.log('Propiedades filtradas:', filteredProperties);
-      setProperties(filteredProperties);
+      console.log('Propiedades filtradas y ordenadas:', sortedProperties);
+      console.log('Total de propiedades a mostrar:', sortedProperties.length);
+      setProperties(sortedProperties);
     } catch (error) {
       console.error('Error cargando propiedades:', error);
       setProperties([]);
@@ -176,6 +190,12 @@ const PropertiesList = () => {
                   )}
                   
                   <div className="property-badges">
+                    {property.destacado && (
+                      <span className="badge badge--destacada">
+                        <i className="fas fa-star"></i>
+                        DESTACADA
+                      </span>
+                    )}
                     <span className={`badge badge--${property.tipo}`}>
                       {property.tipo}
                     </span>
