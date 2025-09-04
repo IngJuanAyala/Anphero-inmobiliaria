@@ -22,23 +22,27 @@ import { db, storage } from './config';
 export const getProperties = async () => {
   try {
     const propertiesRef = collection(db, 'properties');
-    const q = query(
-      propertiesRef, 
-      where('activo', '==', true),
-      orderBy('fechaCreacion', 'desc')
-    );
-    
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(propertiesRef);
     const properties = [];
     
     querySnapshot.forEach((doc) => {
-      properties.push({
-        id: doc.id,
-        ...doc.data()
-      });
+      const data = doc.data();
+      // Solo incluir propiedades activas (o todas si no tienen el campo activo)
+      if (data.activo !== false) {
+        properties.push({
+          id: doc.id,
+          ...data
+        });
+      }
     });
     
-    return properties;
+    // Ordenar por fecha de creación si existe
+    return properties.sort((a, b) => {
+      if (a.fechaCreacion && b.fechaCreacion) {
+        return b.fechaCreacion.toDate() - a.fechaCreacion.toDate();
+      }
+      return 0;
+    });
   } catch (error) {
     console.error('Error obteniendo propiedades:', error);
     throw error;

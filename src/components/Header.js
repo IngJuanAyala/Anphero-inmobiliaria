@@ -56,19 +56,11 @@ const Header = () => {
             </ul>
           </nav>
 
-          {/* Información de contacto rápida */}
-          <div className="header__contact-info hide-mobile">
-            <div className="contact-info__item">
-              <i className="fas fa-phone"></i>
-              <span>+57 322 366 9110</span>
-            </div>
-          </div>
-
           {/* Botón de contacto */}
           <div className="header__cta hide-mobile">
-            <a href="https://wa.me/573223669110" target="_blank" rel="noopener noreferrer" className="btn btn--primary">
+            <a href="https://wa.me/573223669110" target="_blank" rel="noopener noreferrer" className="btn btn--whatsapp">
               <i className="fab fa-whatsapp"></i>
-              Consulta Gratuita
+              WhatsApp
             </a>
           </div>
 

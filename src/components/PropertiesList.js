@@ -15,20 +15,27 @@ const PropertiesList = () => {
   const loadProperties = async () => {
     setLoading(true);
     try {
-      let data = [];
+      // Siempre obtener todas las propiedades primero
+      const allProperties = await getProperties();
       
-      if (activeFilter === 'todas') {
-        data = await getProperties();
-      } else if (activeFilter === 'casas' || activeFilter === 'apartamentos') {
-        data = await getPropertiesByType(activeFilter.slice(0, -1)); // Remove 's' from end
-      } else if (activeFilter === 'arriendo' || activeFilter === 'venta') {
-        data = await getPropertiesByOperation(activeFilter);
+      // Filtrar localmente
+      let filteredProperties = allProperties;
+      
+      if (activeFilter === 'casas') {
+        filteredProperties = allProperties.filter(p => p.tipo === 'casa');
+      } else if (activeFilter === 'apartamentos') {
+        filteredProperties = allProperties.filter(p => p.tipo === 'apartamento');
+      } else if (activeFilter === 'arriendo') {
+        filteredProperties = allProperties.filter(p => p.operacion === 'arriendo');
+      } else if (activeFilter === 'venta') {
+        filteredProperties = allProperties.filter(p => p.operacion === 'venta');
       }
       
-      setProperties(data);
+      console.log('Propiedades cargadas:', allProperties);
+      console.log('Propiedades filtradas:', filteredProperties);
+      setProperties(filteredProperties);
     } catch (error) {
       console.error('Error cargando propiedades:', error);
-      // Mostrar mensaje de error al usuario
       setProperties([]);
     } finally {
       setLoading(false);
@@ -106,6 +113,10 @@ const PropertiesList = () => {
             <i className="fas fa-home"></i>
             <h3>No hay propiedades disponibles</h3>
             <p>Próximamente tendremos nuevas opciones para ti</p>
+            <div className="debug-info" style={{marginTop: '20px', padding: '10px', background: '#f5f5f5', borderRadius: '5px', fontSize: '12px'}}>
+              <p><strong>Debug:</strong> Filtro activo: {activeFilter}</p>
+              <p>Total de propiedades cargadas: {properties.length}</p>
+            </div>
           </div>
         ) : (
           <div className="properties-grid">
@@ -155,10 +166,10 @@ const PropertiesList = () => {
                       Contactar
                     </button>
                     
-                    {property.video && (
+                    {(property.video || property.videoUrl) && (
                       <button 
                         className="btn btn--outline"
-                        onClick={() => handleVideoClick(property.video)}
+                        onClick={() => handleVideoClick(property.video || property.videoUrl)}
                       >
                         <i className="fas fa-video"></i>
                         Ver Video
