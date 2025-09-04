@@ -7,6 +7,9 @@ const PropertiesList = () => {
   const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState('todas');
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedPropertyForModal, setSelectedPropertyForModal] = useState(null);
+  const [modalImageIndex, setModalImageIndex] = useState(0);
 
   useEffect(() => {
     loadProperties();
@@ -60,6 +63,36 @@ const PropertiesList = () => {
     if (videoUrl) {
       window.open(videoUrl, '_blank');
     }
+  };
+
+
+  const handleImageClick = (property) => {
+    if (property.fotos && property.fotos.length > 0) {
+      setSelectedPropertyForModal(property);
+      setModalImageIndex(0);
+      setShowImageModal(true);
+    }
+  };
+
+  const handleModalImageNavigation = (direction) => {
+    if (!selectedPropertyForModal || !selectedPropertyForModal.fotos) return;
+
+    const totalImages = selectedPropertyForModal.fotos.length;
+    let newIndex;
+
+    if (direction === 'next') {
+      newIndex = (modalImageIndex + 1) % totalImages;
+    } else {
+      newIndex = modalImageIndex === 0 ? totalImages - 1 : modalImageIndex - 1;
+    }
+
+    setModalImageIndex(newIndex);
+  };
+
+  const closeImageModal = () => {
+    setShowImageModal(false);
+    setSelectedPropertyForModal(null);
+    setModalImageIndex(0);
   };
 
   const filters = [
@@ -124,7 +157,18 @@ const PropertiesList = () => {
               <div key={property.id} className="property-card">
                 <div className="property-image">
                   {property.fotos && property.fotos.length > 0 ? (
-                    <img src={property.fotos[0]} alt={property.titulo} />
+                    <div className="property-image-container" onClick={() => handleImageClick(property)}>
+                      <img 
+                        src={property.fotos[0]} 
+                        alt={property.titulo} 
+                      />
+                      {property.fotos.length > 1 && (
+                        <div className="multiple-images-indicator">
+                          <i className="fas fa-images"></i>
+                          <span>{property.fotos.length}</span>
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <div className="no-image">
                       <i className="fas fa-image"></i>
@@ -198,6 +242,91 @@ const PropertiesList = () => {
           </div>
         </div>
       </div>
+
+      {/* Modal de imágenes */}
+      {showImageModal && selectedPropertyForModal && (
+        <div className="image-modal-overlay" onClick={closeImageModal}>
+          <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="image-modal-close" onClick={closeImageModal}>
+              <i className="fas fa-times"></i>
+            </button>
+            
+            <div className="image-modal-header">
+              <h3>{selectedPropertyForModal.titulo}</h3>
+              <p>{selectedPropertyForModal.ubicacion}</p>
+            </div>
+
+            <div className="image-modal-body">
+              <div className="modal-image-container">
+                <img 
+                  src={selectedPropertyForModal.fotos[modalImageIndex]} 
+                  alt={`${selectedPropertyForModal.titulo} - Imagen ${modalImageIndex + 1}`}
+                />
+                
+                {selectedPropertyForModal.fotos.length > 1 && (
+                  <>
+                    <button 
+                      className="modal-nav-btn modal-nav-btn--prev"
+                      onClick={() => handleModalImageNavigation('prev')}
+                    >
+                      <i className="fas fa-chevron-left"></i>
+                    </button>
+                    <button 
+                      className="modal-nav-btn modal-nav-btn--next"
+                      onClick={() => handleModalImageNavigation('next')}
+                    >
+                      <i className="fas fa-chevron-right"></i>
+                    </button>
+                  </>
+                )}
+              </div>
+
+              {selectedPropertyForModal.fotos.length > 1 && (
+                <div className="modal-image-thumbnails">
+                  {selectedPropertyForModal.fotos.map((foto, index) => (
+                    <img
+                      key={index}
+                      src={foto}
+                      alt={`Miniatura ${index + 1}`}
+                      className={`thumbnail ${index === modalImageIndex ? 'active' : ''}`}
+                      onClick={() => setModalImageIndex(index)}
+                    />
+                  ))}
+                </div>
+              )}
+
+              <div className="modal-image-info">
+                <span className="image-counter">
+                  {modalImageIndex + 1} / {selectedPropertyForModal.fotos.length}
+                </span>
+                <span className="image-price">
+                  {formatPrice(selectedPropertyForModal.precio)}
+                </span>
+              </div>
+            </div>
+
+            <div className="image-modal-footer">
+              <button 
+                className="btn btn--primary"
+                onClick={() => handleWhatsAppClick(selectedPropertyForModal)}
+              >
+                <i className="fab fa-whatsapp"></i>
+                Contactar por WhatsApp
+              </button>
+              
+              {(selectedPropertyForModal.video || selectedPropertyForModal.videoUrl) && (
+                <button 
+                  className="btn btn--outline"
+                  onClick={() => handleVideoClick(selectedPropertyForModal.video || selectedPropertyForModal.videoUrl)}
+                >
+                  <i className="fas fa-video"></i>
+                  Ver Video
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

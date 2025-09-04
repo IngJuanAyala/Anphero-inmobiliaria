@@ -23,6 +23,8 @@ const PropertyModal = ({ isOpen, onClose, property = null, onSuccess }) => {
   const [newCharacteristic, setNewCharacteristic] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [fotos, setFotos] = useState([]);
+  const [newFotoUrl, setNewFotoUrl] = useState('');
 
   // Cargar datos de la propiedad si estamos editando
   useEffect(() => {
@@ -43,6 +45,7 @@ const PropertyModal = ({ isOpen, onClose, property = null, onSuccess }) => {
         activo: property.activo !== undefined ? property.activo : true,
         destacado: property.destacado || false
       });
+      setFotos(property.fotos || []);
     } else {
       // Resetear formulario para nueva propiedad
       setFormData({
@@ -61,6 +64,7 @@ const PropertyModal = ({ isOpen, onClose, property = null, onSuccess }) => {
         activo: true,
         destacado: false
       });
+      setFotos([]);
     }
   }, [property, isOpen]);
 
@@ -89,6 +93,17 @@ const PropertyModal = ({ isOpen, onClose, property = null, onSuccess }) => {
     }));
   };
 
+  const handleAddFoto = () => {
+    if (newFotoUrl.trim()) {
+      setFotos(prev => [...prev, newFotoUrl.trim()]);
+      setNewFotoUrl('');
+    }
+  };
+
+  const handleRemoveFoto = (index) => {
+    setFotos(prev => prev.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -97,6 +112,7 @@ const PropertyModal = ({ isOpen, onClose, property = null, onSuccess }) => {
     try {
       const propertyData = {
         ...formData,
+        fotos: fotos,
         precio: parseFloat(formData.precio),
         area: parseFloat(formData.area),
         habitaciones: parseInt(formData.habitaciones),
@@ -323,8 +339,41 @@ const PropertyModal = ({ isOpen, onClose, property = null, onSuccess }) => {
             </div>
           </div>
 
-          <div className="form-row">
-            <div className="form-group checkbox-group">
+          <div className="form-group">
+            <label>URLs de Fotos</label>
+            <div className="characteristics-input">
+              <input
+                type="url"
+                value={newFotoUrl}
+                onChange={(e) => setNewFotoUrl(e.target.value)}
+                placeholder="https://ejemplo.com/imagen.jpg"
+                onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddFoto())}
+              />
+              <button type="button" onClick={handleAddFoto} className="btn-add">
+                <i className="fas fa-plus"></i>
+              </button>
+            </div>
+            <div className="characteristics-list">
+              {fotos.map((foto, index) => (
+                <span key={index} className="characteristic-tag">
+                  <a href={foto} target="_blank" rel="noopener noreferrer" className="foto-link">
+                    <i className="fas fa-image"></i>
+                    Foto {index + 1}
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveFoto(index)}
+                    className="remove-tag"
+                  >
+                    <i className="fas fa-times"></i>
+                  </button>
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="form-group checkbox-row">
+            <div className="checkbox-group">
               <label>
                 <input
                   type="checkbox"
@@ -336,7 +385,7 @@ const PropertyModal = ({ isOpen, onClose, property = null, onSuccess }) => {
               </label>
             </div>
 
-            <div className="form-group checkbox-group">
+            <div className="checkbox-group">
               <label>
                 <input
                   type="checkbox"
