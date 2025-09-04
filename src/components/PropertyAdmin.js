@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getAllProperties, deleteProperty } from '../firebase/propertiesService';
 import PropertyModal from './PropertyModal';
+import addSampleProperties from '../firebase/addSampleProperties';
 import './PropertyAdmin.scss';
 
 const PropertyAdmin = () => {
@@ -22,7 +23,7 @@ const PropertyAdmin = () => {
       setProperties(data);
     } catch (error) {
       console.error('Error cargando propiedades:', error);
-      alert('Error cargando propiedades');
+      alert('Error cargando propiedades: ' + error.message);
     } finally {
       setLoading(false);
     }
@@ -78,13 +79,23 @@ const PropertyAdmin = () => {
           </Link>
           <h2>Gestión de Propiedades</h2>
         </div>
-        <button 
-          className="btn btn--primary"
-          onClick={handleCreateNew}
-        >
-          <i className="fas fa-plus"></i>
-          Agregar Propiedad
-        </button>
+        <div style={{display: 'flex', gap: '10px'}}>
+          <button 
+            className="btn btn--primary"
+            onClick={handleCreateNew}
+          >
+            <i className="fas fa-plus"></i>
+            Agregar Propiedad
+          </button>
+          <button 
+            className="btn btn--secondary"
+            onClick={addSampleProperties}
+            style={{backgroundColor: '#28a745', color: 'white'}}
+          >
+            <i className="fas fa-database"></i>
+            Cargar Datos de Muestra
+          </button>
+        </div>
       </div>
 
       <PropertyModal

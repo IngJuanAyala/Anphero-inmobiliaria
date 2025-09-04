@@ -47,9 +47,6 @@ const PropertiesList = () => {
         return 0;
       });
 
-      console.log('Propiedades cargadas:', allProperties);
-      console.log('Propiedades filtradas y ordenadas:', sortedProperties);
-      console.log('Total de propiedades a mostrar:', sortedProperties.length);
       setProperties(sortedProperties);
     } catch (error) {
       console.error('Error cargando propiedades:', error);

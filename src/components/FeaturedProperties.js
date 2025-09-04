@@ -16,13 +16,10 @@ const FeaturedProperties = () => {
   const loadFeaturedProperties = async () => {
     setLoading(true);
     try {
-      console.log('Cargando propiedades destacadas...');
       const allProperties = await getProperties();
-      console.log('Todas las propiedades activas:', allProperties);
       
       // Filtrar solo las propiedades destacadas
       const featured = allProperties.filter(property => property.destacado === true);
-      console.log('Propiedades destacadas encontradas:', featured);
       
       setFeaturedProperties(featured.slice(0, 3)); // Mostrar máximo 3 destacadas
     } catch (error) {
