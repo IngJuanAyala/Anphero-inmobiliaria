@@ -1,0 +1,16 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Reglas para desarrollo local - permitir acceso desde localhost
+    match /{allPaths=**} {
+      allow read, write: if 
+        // Permitir acceso sin autenticación para desarrollo
+        request.auth == null ||
+        // Permitir desde localhost en cualquier puerto
+        request.headers.origin.matches('https?://localhost(:[0-9]+)?') ||
+        request.headers.origin.matches('https?://127.0.0.1(:[0-9]+)?') ||
+        // Permitir desde cualquier dominio en desarrollo
+        (request.headers.origin != null && request.headers.origin.contains('localhost'));
+    }
+  }
+}

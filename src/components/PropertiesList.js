@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getProperties, getPropertiesByType, getPropertiesByOperation } from '../firebase/propertiesService';
+import { devLog } from '../utils/logger';
 import './PropertiesList.scss';
 
 const PropertiesList = () => {
@@ -10,6 +11,7 @@ const PropertiesList = () => {
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedPropertyForModal, setSelectedPropertyForModal] = useState(null);
   const [modalImageIndex, setModalImageIndex] = useState(0);
+  const [showFullscreenImage, setShowFullscreenImage] = useState(false);
 
   useEffect(() => {
     loadProperties();
@@ -18,8 +20,10 @@ const PropertiesList = () => {
   const loadProperties = async () => {
     setLoading(true);
     try {
+      devLog('Cargando propiedades...');
       // Siempre obtener todas las propiedades primero
       const allProperties = await getProperties();
+      devLog('Propiedades obtenidas:', allProperties.length);
       
       // Filtrar localmente
       let filteredProperties = allProperties;
@@ -48,6 +52,7 @@ const PropertiesList = () => {
       });
 
       setProperties(sortedProperties);
+      devLog('Propiedades filtradas y ordenadas:', sortedProperties.length);
     } catch (error) {
       console.error('Error cargando propiedades:', error);
       setProperties([]);
@@ -104,6 +109,33 @@ const PropertiesList = () => {
     setShowImageModal(false);
     setSelectedPropertyForModal(null);
     setModalImageIndex(0);
+    setShowFullscreenImage(false);
+  };
+
+  // Función para abrir la imagen en pantalla completa
+  const openFullscreenImage = () => {
+    setShowFullscreenImage(true);
+  };
+
+  // Función para cerrar la imagen en pantalla completa
+  const closeFullscreenImage = () => {
+    setShowFullscreenImage(false);
+  };
+
+  // Función para navegación en pantalla completa
+  const handleFullscreenNavigation = (direction) => {
+    if (!selectedPropertyForModal || !selectedPropertyForModal.fotos) return;
+
+    const totalImages = selectedPropertyForModal.fotos.length;
+    let newIndex;
+
+    if (direction === 'next') {
+      newIndex = (modalImageIndex + 1) % totalImages;
+    } else {
+      newIndex = modalImageIndex === 0 ? totalImages - 1 : modalImageIndex - 1;
+    }
+
+    setModalImageIndex(newIndex);
   };
 
   const filters = [
@@ -278,7 +310,13 @@ const PropertiesList = () => {
                 <img 
                   src={selectedPropertyForModal.fotos[modalImageIndex]} 
                   alt={`${selectedPropertyForModal.titulo} - Imagen ${modalImageIndex + 1}`}
+                  onClick={openFullscreenImage}
+                  className="clickable-image"
                 />
+                <div className="zoom-indicator">
+                  <i className="fas fa-search-plus"></i>
+                  <span>Haz clic para ampliar</span>
+                </div>
                 
                 {selectedPropertyForModal.fotos.length > 1 && (
                   <>
@@ -340,6 +378,51 @@ const PropertiesList = () => {
                   Ver Video
                 </button>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de pantalla completa */}
+      {showFullscreenImage && selectedPropertyForModal && (
+        <div className="fullscreen-image-overlay" onClick={closeFullscreenImage}>
+          <div className="fullscreen-image-content" onClick={(e) => e.stopPropagation()}>
+            <button className="fullscreen-close-btn" onClick={closeFullscreenImage}>
+              <i className="fas fa-times"></i>
+            </button>
+
+            <div className="fullscreen-image-container">
+              <img
+                src={selectedPropertyForModal.fotos[modalImageIndex]}
+                alt={`${selectedPropertyForModal.titulo} - Imagen ${modalImageIndex + 1}`}
+                className="fullscreen-image"
+              />
+
+              {selectedPropertyForModal.fotos.length > 1 && (
+                <>
+                  <button
+                    className="fullscreen-nav-btn fullscreen-nav-btn--prev"
+                    onClick={() => handleFullscreenNavigation('prev')}
+                  >
+                    <i className="fas fa-chevron-left"></i>
+                  </button>
+                  <button
+                    className="fullscreen-nav-btn fullscreen-nav-btn--next"
+                    onClick={() => handleFullscreenNavigation('next')}
+                  >
+                    <i className="fas fa-chevron-right"></i>
+                  </button>
+                </>
+              )}
+            </div>
+
+            <div className="fullscreen-image-info">
+              <div className="image-counter">
+                {modalImageIndex + 1} / {selectedPropertyForModal.fotos.length}
+              </div>
+              <div className="image-title">
+                {selectedPropertyForModal.titulo}
+              </div>
             </div>
           </div>
         </div>
