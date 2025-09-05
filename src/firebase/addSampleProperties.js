@@ -97,11 +97,8 @@ const sampleProperties = [
 
 async function addSampleProperties() {
   try {
-    console.log('🚀 Iniciando agregado de propiedades de muestra...');
-    
     for (const property of sampleProperties) {
-      const docRef = await addDoc(collection(db, 'properties'), property);
-      console.log('✅ Propiedad agregada con ID:', docRef.id);
+      await addDoc(collection(db, 'properties'), property);
     }
     
     console.log('🎉 Todas las propiedades de muestra han sido agregadas exitosamente!');
@@ -114,7 +111,6 @@ async function addSampleProperties() {
 if (typeof window !== 'undefined') {
   // Solo ejecutar en el navegador
   window.addSampleProperties = addSampleProperties;
-  console.log('💡 Para agregar propiedades de muestra, ejecuta: addSampleProperties()');
 }
 
 export default addSampleProperties;

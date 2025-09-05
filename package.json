@@ -5,7 +5,8 @@
   "homepage": ".",
   "main": "index.js",
   "scripts": {
-    "start": "set HTTPS=true && react-scripts start",
+    "start": "react-scripts start",
+    "start:https": "set HTTPS=true && react-scripts start",
     "build": "react-scripts build && rmdir /s /q docs 2>nul & mkdir docs & xcopy build\\* docs\\ /e /i /y",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

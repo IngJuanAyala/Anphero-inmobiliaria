@@ -10,6 +10,7 @@ const PropertyAdmin = () => {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [editingProperty, setEditingProperty] = useState(null);
+  const [connectionError, setConnectionError] = useState(false);
 
   // Cargar propiedades al montar el componente
   useEffect(() => {
@@ -18,12 +19,25 @@ const PropertyAdmin = () => {
 
   const loadProperties = async () => {
     setLoading(true);
+    setConnectionError(false);
     try {
       const data = await getAllProperties();
       setProperties(data);
     } catch (error) {
       console.error('Error cargando propiedades:', error);
-      alert('Error cargando propiedades: ' + error.message);
+      setConnectionError(true);
+      
+      // Mostrar mensaje más específico según el tipo de error
+      if (error.message.includes('Timeout')) {
+        alert('Error: La conexión con la base de datos tardó demasiado. Verifica tu conexión a internet.');
+      } else if (error.code === 'unavailable') {
+        alert('Error: No se puede conectar con la base de datos. Verifica tu conexión a internet.');
+      } else {
+        alert('Error cargando propiedades: ' + error.message);
+      }
+      
+      // En caso de error, establecer array vacío para evitar que se quede cargando
+      setProperties([]);
     } finally {
       setLoading(false);
     }
@@ -69,6 +83,7 @@ const PropertyAdmin = () => {
     }).format(price);
   };
 
+
   return (
     <div className="property-admin">
       <div className="admin-header">
@@ -79,7 +94,7 @@ const PropertyAdmin = () => {
           </Link>
           <h2>Gestión de Propiedades</h2>
         </div>
-        <div style={{display: 'flex', gap: '10px'}}>
+        <div className="admin-header__right">
           <button 
             className="btn btn--primary"
             onClick={handleCreateNew}
@@ -90,7 +105,7 @@ const PropertyAdmin = () => {
           <button 
             className="btn btn--secondary"
             onClick={addSampleProperties}
-            style={{backgroundColor: '#28a745', color: 'white'}}
+            style={{backgroundColor: '#28a745', color: 'white', borderColor: '#28a745'}}
           >
             <i className="fas fa-database"></i>
             Cargar Datos de Muestra
@@ -122,6 +137,26 @@ const PropertyAdmin = () => {
         
         {loading ? (
           <div className="loading">Cargando propiedades...</div>
+        ) : connectionError ? (
+          <div className="connection-error">
+            <div className="error-message">
+              <i className="fas fa-exclamation-triangle"></i>
+              <h3>Error de Conexión</h3>
+              <p>No se pudo conectar con la base de datos. Esto puede deberse a:</p>
+              <ul>
+                <li>Problemas de conexión a internet</li>
+                <li>Configuración de CORS en Firebase</li>
+                <li>Reglas de seguridad de Firestore</li>
+              </ul>
+              <button 
+                className="btn btn--primary"
+                onClick={loadProperties}
+              >
+                <i className="fas fa-redo"></i>
+                Reintentar Conexión
+              </button>
+            </div>
+          </div>
         ) : (
           <div className="properties-grid">
             {properties.map((property) => (

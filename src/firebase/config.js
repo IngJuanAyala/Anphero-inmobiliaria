@@ -23,4 +23,13 @@ export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const analytics = getAnalytics(app);
 
+// Configuración para desarrollo local
+if (process.env.NODE_ENV === 'development') {
+  // Configurar Firestore para desarrollo local
+  import('firebase/firestore').then(({ enableNetwork, connectFirestoreEmulator }) => {
+    // Asegurar que la conexión esté habilitada
+    enableNetwork(db).catch(console.error);
+  });
+}
+
 export default app;

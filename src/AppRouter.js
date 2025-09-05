@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import About from './components/About';
@@ -32,37 +32,48 @@ const HomePage = () => {
   );
 };
 
+
+const AppContent = () => {
+  const location = useLocation();
+
+  const shouldShowHeader = !location.pathname.startsWith('/admin');
+  
+  return (
+    <div className="App">
+      {shouldShowHeader && <Header />}
+      <main>
+        <Routes>
+          {/* Ruta principal - Página de inicio */}
+          <Route path="/" element={<HomePage />} />
+          
+          {/* Ruta de administración */}
+          <Route path="/admin" element={<AdminRoute />} />
+          
+          {/* Ruta 404 - Página no encontrada */}
+          <Route path="*" element={
+            <div className="not-found">
+              <div className="container">
+                <h1>404 - Página no encontrada</h1>
+                <p>La página que buscas no existe.</p>
+                <a href="/" className="btn btn--primary">
+                  Volver al inicio
+                </a>
+              </div>
+            </div>
+          } />
+        </Routes>
+      </main>
+      {shouldShowHeader && <Footer />}
+      {shouldShowHeader && <WhatsAppButton />}
+    </div>
+  );
+};
+
 // Componente principal con rutas
 const AppRouter = () => {
   return (
     <Router>
-      <div className="App">
-        <Header />
-        <main>
-          <Routes>
-            {/* Ruta principal - Página de inicio */}
-            <Route path="/" element={<HomePage />} />
-            
-            {/* Ruta de administración */}
-            <Route path="/admin" element={<AdminRoute />} />
-            
-            {/* Ruta 404 - Página no encontrada */}
-            <Route path="*" element={
-              <div className="not-found">
-                <div className="container">
-                  <h1>404 - Página no encontrada</h1>
-                  <p>La página que buscas no existe.</p>
-                  <a href="/" className="btn btn--primary">
-                    Volver al inicio
-                  </a>
-                </div>
-              </div>
-            } />
-          </Routes>
-        </main>
-        <Footer />
-        <WhatsAppButton />
-      </div>
+      <AppContent />
     </Router>
   );
 };

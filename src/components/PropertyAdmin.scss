@@ -7,15 +7,26 @@
   .admin-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 30px;
     padding-bottom: 20px;
     border-bottom: 2px solid #e0e0e0;
+    flex-wrap: wrap;
+    gap: 20px;
 
     &__left {
       display: flex;
       align-items: center;
       gap: 20px;
+      flex: 1;
+      min-width: 300px;
+    }
+
+    &__right {
+      display: flex;
+      gap: 10px;
+      flex-shrink: 0;
+      align-items: center;
     }
 
     h2 {
@@ -36,6 +47,8 @@
       cursor: pointer;
       transition: all 0.3s ease;
       text-decoration: none;
+      white-space: nowrap;
+      min-width: fit-content;
 
       &--primary {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -191,6 +204,54 @@
       padding: 40px;
       color: #6c757d;
       font-size: 1.1rem;
+    }
+
+    .connection-error {
+      text-align: center;
+      padding: 40px;
+      
+      .error-message {
+        max-width: 500px;
+        margin: 0 auto;
+        background: #fff5f5;
+        border: 2px solid #fed7d7;
+        border-radius: 12px;
+        padding: 30px;
+        
+        i {
+          font-size: 3rem;
+          color: #e53e3e;
+          margin-bottom: 20px;
+        }
+        
+        h3 {
+          color: #e53e3e;
+          margin-bottom: 15px;
+          font-size: 1.5rem;
+        }
+        
+        p {
+          color: #4a5568;
+          margin-bottom: 15px;
+          line-height: 1.6;
+        }
+        
+        ul {
+          text-align: left;
+          color: #4a5568;
+          margin-bottom: 25px;
+          padding-left: 20px;
+          
+          li {
+            margin-bottom: 8px;
+            line-height: 1.5;
+          }
+        }
+        
+        .btn {
+          margin-top: 20px;
+        }
+      }
     }
 
     .properties-grid {
@@ -381,6 +442,32 @@
 }
 
 // Responsive design
+@media (min-width: 1400px) {
+  .property-admin {
+    max-width: 1400px;
+    
+    .admin-header {
+      &__right {
+        gap: 15px;
+      }
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .property-admin {
+    .admin-header {
+      &__left {
+        min-width: 250px;
+      }
+      
+      h2 {
+        font-size: 1.8rem;
+      }
+    }
+  }
+}
+
 @media (max-width: 768px) {
   .property-admin {
     padding: 15px;
@@ -389,6 +476,19 @@
       flex-direction: column;
       gap: 15px;
       text-align: center;
+
+      &__left {
+        flex-direction: column;
+        gap: 10px;
+        min-width: auto;
+        width: 100%;
+      }
+
+      &__right {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+      }
 
       h2 {
         font-size: 1.5rem;

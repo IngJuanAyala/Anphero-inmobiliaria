@@ -52,8 +52,15 @@ export const getProperties = async () => {
 // Obtener todas las propiedades (activas e inactivas) para administración
 export const getAllProperties = async () => {
   try {
+    // Agregar timeout para evitar que se quede cargando indefinidamente
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Timeout: La consulta tardó demasiado')), 10000);
+    });
+    
     const propertiesRef = collection(db, 'properties');
-    const querySnapshot = await getDocs(propertiesRef);
+    const queryPromise = getDocs(propertiesRef);
+    
+    const querySnapshot = await Promise.race([queryPromise, timeoutPromise]);
     const properties = [];
     
     querySnapshot.forEach((doc) => {
@@ -73,6 +80,12 @@ export const getAllProperties = async () => {
     });
   } catch (error) {
     console.error('Error obteniendo todas las propiedades:', error);
+    
+    // Si es un error de timeout o conexión, devolver array vacío en lugar de lanzar error
+    if (error.message.includes('Timeout') || error.code === 'unavailable') {
+      return [];
+    }
+    
     throw error;
   }
 };
