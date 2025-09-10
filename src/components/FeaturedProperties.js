@@ -1,61 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { getProperties, getPropertiesByType, getPropertiesByOperation } from '../firebase/propertiesService';
-import { devLog } from '../utils/logger';
-import './PropertiesList.scss';
+import { getProperties } from '../firebase/propertiesService';
+import './FeaturedProperties.scss';
 
-const PropertiesList = () => {
-  const [properties, setProperties] = useState([]);
+const FeaturedProperties = () => {
+  const [featuredProperties, setFeaturedProperties] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeFilter, setActiveFilter] = useState('todas');
-  const [selectedProperty, setSelectedProperty] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedPropertyForModal, setSelectedPropertyForModal] = useState(null);
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [showFullscreenImage, setShowFullscreenImage] = useState(false);
 
   useEffect(() => {
-    loadProperties();
-  }, [activeFilter]);
+    loadFeaturedProperties();
+  }, []);
 
-  const loadProperties = async () => {
+
+  const loadFeaturedProperties = async () => {
     setLoading(true);
     try {
-      devLog('Cargando propiedades...');
-      // Siempre obtener todas las propiedades primero
       const allProperties = await getProperties();
-      devLog('Propiedades obtenidas:', allProperties.length);
       
-      // Filtrar localmente
-      let filteredProperties = allProperties;
+      // Filtrar solo las propiedades destacadas
+      const featured = allProperties.filter(property => property.destacado === true);
       
-      if (activeFilter === 'casas') {
-        filteredProperties = allProperties.filter(p => p.tipo === 'casa');
-      } else if (activeFilter === 'apartamentos') {
-        filteredProperties = allProperties.filter(p => p.tipo === 'apartamento');
-      } else if (activeFilter === 'arriendo') {
-        filteredProperties = allProperties.filter(p => p.operacion === 'arriendo');
-      } else if (activeFilter === 'venta') {
-        filteredProperties = allProperties.filter(p => p.operacion === 'venta');
-      }
-      
-      // Ordenar: destacadas primero, luego por fecha
-      const sortedProperties = filteredProperties.sort((a, b) => {
-        // Primero las destacadas
-        if (a.destacado && !b.destacado) return -1;
-        if (!a.destacado && b.destacado) return 1;
-        
-        // Luego por fecha de creación
-        if (a.fechaCreacion && b.fechaCreacion) {
-          return b.fechaCreacion.toDate() - a.fechaCreacion.toDate();
-        }
-        return 0;
-      });
-
-      setProperties(sortedProperties);
-      devLog('Propiedades filtradas y ordenadas:', sortedProperties.length);
+      setFeaturedProperties(featured.slice(0, 3)); // Mostrar máximo 3 destacadas
     } catch (error) {
-      console.error('Error cargando propiedades:', error);
-      setProperties([]);
+      console.error('Error cargando propiedades destacadas:', error);
+      setFeaturedProperties([]);
     } finally {
       setLoading(false);
     }
@@ -70,18 +41,12 @@ const PropertiesList = () => {
   };
 
   const handleWhatsAppClick = (property) => {
-    const message = `Hola, me interesa la propiedad: ${property.titulo} - ${formatPrice(property.precio)}`;
+    const message = `Hola, me interesa la propiedad destacada: ${property.titulo} - ${formatPrice(property.precio)}`;
     const whatsappUrl = `https://wa.me/573223669110?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
-  const handleVideoClick = (videoUrl) => {
-    if (videoUrl) {
-      window.open(videoUrl, '_blank');
-    }
-  };
-
-
+  // Función para abrir el modal de imágenes
   const handleImageClick = (property) => {
     if (property.fotos && property.fotos.length > 0) {
       setSelectedPropertyForModal(property);
@@ -90,6 +55,7 @@ const PropertiesList = () => {
     }
   };
 
+  // Función para navegación de imágenes en el modal
   const handleModalImageNavigation = (direction) => {
     if (!selectedPropertyForModal || !selectedPropertyForModal.fotos) return;
 
@@ -105,6 +71,7 @@ const PropertiesList = () => {
     setModalImageIndex(newIndex);
   };
 
+  // Función para cerrar el modal de imágenes
   const closeImageModal = () => {
     setShowImageModal(false);
     setSelectedPropertyForModal(null);
@@ -138,157 +105,129 @@ const PropertiesList = () => {
     setModalImageIndex(newIndex);
   };
 
-  const filters = [
-    { id: 'todas', label: 'Todas', icon: 'fas fa-home' },
-    { id: 'casas', label: 'Casas', icon: 'fas fa-home' },
-    { id: 'apartamentos', label: 'Apartamentos', icon: 'fas fa-building' },
-    { id: 'arriendo', label: 'Arriendo', icon: 'fas fa-key' },
-    { id: 'venta', label: 'Venta', icon: 'fas fa-handshake' }
-  ];
-
   if (loading) {
     return (
-      <section className="properties-list-section">
+      <section className="featured-properties-section">
         <div className="container">
           <div className="loading-container">
             <div className="loading-spinner"></div>
-            <p>Cargando propiedades...</p>
+            <p>Cargando propiedades destacadas...</p>
           </div>
         </div>
       </section>
     );
   }
 
+  if (featuredProperties.length === 0) {
+    return null; // No mostrar la sección si no hay propiedades destacadas
+  }
+
   return (
-    <section className="properties-list-section">
+    <section className="featured-properties-section">
       <div className="container">
         <div className="section-header">
-          <h2 className="section-title">Nuestras Propiedades</h2>
+          <div className="section-badge">
+            <i className="fas fa-star"></i>
+            <span>Propiedades Destacadas</span>
+          </div>
+          <h2 className="section-title">Nuestras Mejores Oportunidades</h2>
           <p className="section-description">
-            Descubre las mejores opciones inmobiliarias disponibles
+            Propiedades seleccionadas especialmente por su excelente ubicación, características únicas y gran valor
           </p>
         </div>
 
-        <div className="filters-container">
-          <div className="filters">
-            {filters.map((filter) => (
-              <button
-                key={filter.id}
-                className={`filter-btn ${activeFilter === filter.id ? 'active' : ''}`}
-                onClick={() => setActiveFilter(filter.id)}
-              >
-                <i className={filter.icon}></i>
-                <span>{filter.label}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {properties.length === 0 ? (
-          <div className="no-properties">
-            <i className="fas fa-home"></i>
-            <h3>No hay propiedades disponibles</h3>
-            <p>Próximamente tendremos nuevas opciones para ti</p>
-            <div className="debug-info" style={{marginTop: '20px', padding: '10px', background: '#f5f5f5', borderRadius: '5px', fontSize: '12px'}}>
-              <p><strong>Debug:</strong> Filtro activo: {activeFilter}</p>
-              <p>Total de propiedades cargadas: {properties.length}</p>
-            </div>
-          </div>
-        ) : (
-          <div className="properties-grid">
-            {properties.map((property) => (
-              <div key={property.id} className="property-card">
-                <div className="property-image">
-                  {property.fotos && property.fotos.length > 0 ? (
-                    <div className="property-image-container" onClick={() => handleImageClick(property)}>
-                      <img 
-                        src={property.fotos[0]} 
-                        alt={property.titulo} 
-                      />
-                      {property.fotos.length > 1 && (
-                        <div className="multiple-images-indicator">
-                          <i className="fas fa-images"></i>
-                          <span>{property.fotos.length}</span>
-                        </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="no-image">
-                      <i className="fas fa-image"></i>
-                    </div>
-                  )}
-                  
-                  <div className="property-badges">
-                    {property.destacado && (
-                      <span className="badge badge--destacada">
-                        <i className="fas fa-star"></i>
-                        DESTACADA
-                      </span>
+        <div className="featured-grid">
+          {featuredProperties.map((property) => (
+            <div key={property.id} className="featured-card">
+              <div className="featured-image" onClick={() => handleImageClick(property)}>
+                {property.fotos && property.fotos.length > 0 ? (
+                  <div className="property-image-container">
+                    <img src={property.fotos[0]} alt={property.titulo} />
+                    {property.fotos.length > 1 && (
+                      <div className="multiple-images-indicator">
+                        <i className="fas fa-images"></i>
+                        <span>{property.fotos.length}</span>
+                      </div>
                     )}
-                    <span className={`badge badge--${property.tipo}`}>
-                      {property.tipo}
-                    </span>
-                    <span className={`badge badge--${property.operacion}`}>
-                      {property.operacion}
-                    </span>
                   </div>
+                ) : (
+                  <div className="no-image">
+                    <i className="fas fa-image"></i>
+                  </div>
+                )}
+                
+                <div className="featured-badge">
+                  <i className="fas fa-star"></i>
+                  <span>DESTACADA</span>
                 </div>
 
-                <div className="property-content">
-                  <h3 className="property-title">{property.titulo}</h3>
-                  
-                  <p className="property-location">
-                    <i className="fas fa-map-marker-alt"></i>
-                    {property.ubicacion}
-                  </p>
-
-                  <p className="property-price">
-                    {formatPrice(property.precio)}
-                  </p>
-
-                  <p className="property-description">
-                    {property.descripcion?.substring(0, 100)}...
-                  </p>
-
-                  <div className="property-actions">
-                    <button 
-                      className="btn btn--primary"
-                      onClick={() => handleWhatsAppClick(property)}
-                    >
-                      <i className="fab fa-whatsapp"></i>
-                      Contactar
-                    </button>
-                    
-                    {(property.video || property.videoUrl) && (
-                      <button 
-                        className="btn btn--outline"
-                        onClick={() => handleVideoClick(property.video || property.videoUrl)}
-                      >
-                        <i className="fas fa-video"></i>
-                        Ver Video
-                      </button>
-                    )}
-                  </div>
+                <div className="property-badges">
+                  <span className={`badge badge--${property.tipo}`}>
+                    {property.tipo}
+                  </span>
+                  <span className={`badge badge--${property.operacion}`}>
+                    {property.operacion}
+                  </span>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
 
-        <div className="cta-section">
-          <div className="cta-card">
-            <h3>¿No encuentras lo que buscas?</h3>
-            <p>Contáctanos y te ayudaremos a encontrar la propiedad perfecta</p>
-            <a 
-              href="https://wa.me/573223669110" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="btn btn--whatsapp"
-            >
-              <i className="fab fa-whatsapp"></i>
-              Contactar por WhatsApp
-            </a>
-          </div>
+              <div className="featured-content">
+                <h3 className="featured-title">{property.titulo}</h3>
+                
+                <p className="featured-location">
+                  <i className="fas fa-map-marker-alt"></i>
+                  {property.ubicacion}
+                </p>
+
+                <div className="featured-details">
+                  <div className="detail-item">
+                    <i className="fas fa-expand-arrows-alt"></i>
+                    <span>{property.area} m²</span>
+                  </div>
+                  <div className="detail-item">
+                    <i className="fas fa-bed"></i>
+                    <span>{property.habitaciones} hab</span>
+                  </div>
+                  <div className="detail-item">
+                    <i className="fas fa-bath"></i>
+                    <span>{property.banos} baños</span>
+                  </div>
+                </div>
+
+                <p className="featured-price">
+                  {formatPrice(property.precio)}
+                </p>
+
+                <div className="featured-actions">
+                  <button 
+                    className="btn btn--primary"
+                    onClick={() => handleWhatsAppClick(property)}
+                  >
+                    <i className="fab fa-whatsapp"></i>
+                    Consultar
+                  </button>
+                  
+                  {(property.video || property.videoUrl) && (
+                    <button 
+                      className="btn btn--outline"
+                      onClick={() => window.open(property.video || property.videoUrl, '_blank')}
+                    >
+                      <i className="fas fa-video"></i>
+                      Ver Video
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="featured-cta">
+          <p>¿Quieres ver todas nuestras propiedades?</p>
+          <a href="#properties" className="btn btn--outline">
+            <i className="fas fa-home"></i>
+            Ver Todas las Propiedades
+          </a>
         </div>
       </div>
 
@@ -299,7 +238,7 @@ const PropertiesList = () => {
             <button className="image-modal-close" onClick={closeImageModal}>
               <i className="fas fa-times"></i>
             </button>
-            
+
             <div className="image-modal-header">
               <h3>{selectedPropertyForModal.titulo}</h3>
               <p>{selectedPropertyForModal.ubicacion}</p>
@@ -307,8 +246,8 @@ const PropertiesList = () => {
 
             <div className="image-modal-body">
               <div className="modal-image-container">
-                <img 
-                  src={selectedPropertyForModal.fotos[modalImageIndex]} 
+                <img
+                  src={selectedPropertyForModal.fotos[modalImageIndex]}
                   alt={`${selectedPropertyForModal.titulo} - Imagen ${modalImageIndex + 1}`}
                   onClick={openFullscreenImage}
                   className="clickable-image"
@@ -317,16 +256,16 @@ const PropertiesList = () => {
                   <i className="fas fa-search-plus"></i>
                   <span>Haz clic para ampliar</span>
                 </div>
-                
+
                 {selectedPropertyForModal.fotos.length > 1 && (
                   <>
-                    <button 
+                    <button
                       className="modal-nav-btn modal-nav-btn--prev"
                       onClick={() => handleModalImageNavigation('prev')}
                     >
                       <i className="fas fa-chevron-left"></i>
                     </button>
-                    <button 
+                    <button
                       className="modal-nav-btn modal-nav-btn--next"
                       onClick={() => handleModalImageNavigation('next')}
                     >
@@ -361,18 +300,18 @@ const PropertiesList = () => {
             </div>
 
             <div className="image-modal-footer">
-              <button 
+              <button
                 className="btn btn--primary"
                 onClick={() => handleWhatsAppClick(selectedPropertyForModal)}
               >
                 <i className="fab fa-whatsapp"></i>
                 Contactar por WhatsApp
               </button>
-              
+
               {(selectedPropertyForModal.video || selectedPropertyForModal.videoUrl) && (
-                <button 
+                <button
                   className="btn btn--outline"
-                  onClick={() => handleVideoClick(selectedPropertyForModal.video || selectedPropertyForModal.videoUrl)}
+                  onClick={() => window.open(selectedPropertyForModal.video || selectedPropertyForModal.videoUrl, '_blank')}
                 >
                   <i className="fas fa-video"></i>
                   Ver Video
@@ -431,4 +370,4 @@ const PropertiesList = () => {
   );
 };
 
-export default PropertiesList;
+export default FeaturedProperties;

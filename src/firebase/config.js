@@ -3,6 +3,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAnalytics } from "firebase/analytics";
+import { devLog } from '../utils/logger';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -22,5 +23,28 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const storage = getStorage(app);
 export const analytics = getAnalytics(app);
+
+devLog('Firebase configurado:', {
+  projectId: firebaseConfig.projectId,
+  environment: process.env.NODE_ENV
+});
+
+// Configuración para desarrollo local
+if (process.env.NODE_ENV === 'development') {
+  devLog('Configurando Firebase para desarrollo...');
+  // Configurar Firestore para desarrollo local
+  import('firebase/firestore').then(({ enableNetwork, connectFirestoreEmulator }) => {
+    // Asegurar que la conexión esté habilitada
+    enableNetwork(db).then(() => {
+      devLog('Conexión a Firestore habilitada');
+    }).catch(console.error);
+  });
+  
+  // Configurar Storage para desarrollo local
+  import('firebase/storage').then(({ connectStorageEmulator }) => {
+    // Configurar Storage para desarrollo local si es necesario
+    // connectStorageEmulator(storage, 'localhost', 9199);
+  });
+}
 
 export default app;

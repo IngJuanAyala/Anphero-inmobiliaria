@@ -35,6 +35,47 @@ body {
   line-height: 1.6;
   color: $text-dark;
   background-color: $white;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+// Contenedor principal para toda la página
+.main-wrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  
+  @media (max-width: $tablet) {
+    padding: 0 0.5rem;
+  }
+}
+
+// Asegurar que todas las secciones tengan márgenes apropiados
+section {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+// Estilos para secciones que ocupan todo el ancho pero con contenido centrado
+.full-width-section {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+  
+  .section-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    
+    @media (max-width: $tablet) {
+      padding: 0 1.5rem;
+    }
+    
+    @media (max-width: $mobile) {
+      padding: 0 1rem;
+    }
+  }
 }
 
 // Estilos de carga
@@ -105,13 +146,17 @@ body {
 
 // Utilidades
 .container {
-  max-width: $desktop;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1rem;
+  padding: 0 2rem;
 
   @media (max-width: $tablet) {
     max-width: 100%;
     padding: 0 1.5rem;
+  }
+
+  @media (max-width: $mobile) {
+    padding: 0 1rem;
   }
 }
 
@@ -186,6 +231,18 @@ body {
     &:hover {
       background-color: $accent-color;
       color: $white;
+    }
+  }
+
+  &--whatsapp {
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    color: $white;
+    border: none;
+
+    &:hover {
+      background: linear-gradient(135deg, #128c7e, #25d366);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
     }
   }
 }

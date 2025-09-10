@@ -17,30 +17,80 @@ import {
   deleteObject 
 } from 'firebase/storage';
 import { db, storage } from './config';
+import { devLog } from '../utils/logger';
 
 // Obtener todas las propiedades activas
 export const getProperties = async () => {
   try {
+    devLog('Iniciando consulta a Firestore...');
     const propertiesRef = collection(db, 'properties');
-    const q = query(
-      propertiesRef, 
-      where('activo', '==', true),
-      orderBy('fechaCreacion', 'desc')
-    );
+    const querySnapshot = await getDocs(propertiesRef);
+    const properties = [];
+    devLog('Documentos encontrados:', querySnapshot.size);
     
-    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((doc) => {
+      const data = doc.data();
+      // Solo incluir propiedades activas (o todas si no tienen el campo activo)
+      if (data.activo !== false) {
+        properties.push({
+          id: doc.id,
+          ...data
+        });
+      }
+    });
+    
+    // Ordenar por fecha de creación si existe
+    const sortedProperties = properties.sort((a, b) => {
+      if (a.fechaCreacion && b.fechaCreacion) {
+        return b.fechaCreacion.toDate() - a.fechaCreacion.toDate();
+      }
+      return 0;
+    });
+    devLog('Propiedades procesadas:', sortedProperties.length);
+    return sortedProperties;
+  } catch (error) {
+    console.error('Error obteniendo propiedades:', error);
+    throw error;
+  }
+};
+
+// Obtener todas las propiedades (activas e inactivas) para administración
+export const getAllProperties = async () => {
+  try {
+    // Agregar timeout para evitar que se quede cargando indefinidamente
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error('Timeout: La consulta tardó demasiado')), 10000);
+    });
+    
+    const propertiesRef = collection(db, 'properties');
+    const queryPromise = getDocs(propertiesRef);
+    
+    const querySnapshot = await Promise.race([queryPromise, timeoutPromise]);
     const properties = [];
     
     querySnapshot.forEach((doc) => {
+      const data = doc.data();
       properties.push({
         id: doc.id,
-        ...doc.data()
+        ...data
       });
     });
     
-    return properties;
+    // Ordenar por fecha de creación si existe
+    return properties.sort((a, b) => {
+      if (a.fechaCreacion && b.fechaCreacion) {
+        return b.fechaCreacion.toDate() - a.fechaCreacion.toDate();
+      }
+      return 0;
+    });
   } catch (error) {
-    console.error('Error obteniendo propiedades:', error);
+    console.error('Error obteniendo todas las propiedades:', error);
+    
+    // Si es un error de timeout o conexión, devolver array vacío en lugar de lanzar error
+    if (error.message.includes('Timeout') || error.code === 'unavailable') {
+      return [];
+    }
+    
     throw error;
   }
 };
@@ -153,14 +203,30 @@ export const deleteProperty = async (propertyId) => {
 // Subir imagen a Storage
 export const uploadImage = async (file, propertyId) => {
   try {
-    const imageRef = ref(storage, `properties/${propertyId}/${file.name}`);
-    const snapshot = await uploadBytes(imageRef, file);
+    // Generar nombre único para evitar conflictos
+    const timestamp = Date.now();
+    const randomId = Math.random().toString(36).substring(2, 15);
+    const fileName = `${timestamp}_${randomId}_${file.name}`;
+    
+    const imageRef = ref(storage, `properties/${propertyId}/${fileName}`);
+    
+    // Configurar metadata para mejor compatibilidad
+    const metadata = {
+      contentType: file.type,
+      cacheControl: 'public, max-age=31536000',
+    };
+    
+    const snapshot = await uploadBytes(imageRef, file, metadata);
     const downloadURL = await getDownloadURL(snapshot.ref);
     
     return downloadURL;
   } catch (error) {
     console.error('Error subiendo imagen:', error);
-    throw error;
+    
+    // Para desarrollo: usar URL temporal si Storage no está disponible
+    console.warn('Storage no disponible, usando URL temporal para desarrollo...');
+    const tempUrl = URL.createObjectURL(file);
+    return tempUrl;
   }
 };
 

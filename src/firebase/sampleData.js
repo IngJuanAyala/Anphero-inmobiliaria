@@ -112,7 +112,7 @@ export const addSampleData = async () => {
       });
     }
     
-    console.log('Datos de ejemplo agregados correctamente');
+    console.log('✅ Datos de ejemplo agregados correctamente');
   } catch (error) {
     console.error('Error agregando datos de ejemplo:', error);
   }

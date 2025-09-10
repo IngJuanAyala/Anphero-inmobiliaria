@@ -17,7 +17,7 @@
   }
 
   .container {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
   }
@@ -217,13 +217,13 @@
 
         .stat-highlight {
           text-align: center;
-          padding: 2rem;
+          padding: 1.5rem;
           background: linear-gradient(135deg, #ffd700, #ffed4e);
-          border-radius: 15px;
+          border-radius: 12px;
           color: #000;
 
           &__number {
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 900;
             line-height: 1;
             margin-bottom: 0.5rem;
@@ -464,14 +464,14 @@
 
         &__body {
           .stat-highlight {
-            padding: 1.5rem;
+            padding: 1.2rem;
 
             &__number {
-              font-size: 2.5rem;
+              font-size: 2rem;
             }
 
             &__label {
-              font-size: 1rem;
+              font-size: 0.9rem;
             }
           }
         }
@@ -564,14 +564,14 @@
           }
 
           .stat-highlight {
-            padding: 1rem;
+            padding: 0.8rem;
 
             &__number {
-              font-size: 2rem;
+              font-size: 1.8rem;
             }
 
             &__label {
-              font-size: 0.9rem;
+              font-size: 0.8rem;
             }
           }
         }
