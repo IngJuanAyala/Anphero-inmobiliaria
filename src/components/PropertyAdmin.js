@@ -102,14 +102,16 @@ const PropertyAdmin = () => {
             <i className="fas fa-plus"></i>
             Agregar Propiedad
           </button>
-          <button 
-            className="btn btn--secondary"
-            onClick={addSampleProperties}
-            style={{backgroundColor: '#28a745', color: 'white', borderColor: '#28a745'}}
-          >
-            <i className="fas fa-database"></i>
-            Cargar Datos de Muestra
-          </button>
+          {process.env.NODE_ENV === 'development' && (
+            <button 
+              className="btn btn--secondary"
+              onClick={addSampleProperties}
+              style={{backgroundColor: '#28a745', color: 'white', borderColor: '#28a745'}}
+            >
+              <i className="fas fa-database"></i>
+              Cargar Datos de Muestra
+            </button>
+          )}
         </div>
       </div>
 
