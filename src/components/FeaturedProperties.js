@@ -4,11 +4,20 @@ import './FeaturedProperties.scss';
 
 const FeaturedProperties = () => {
   const [featuredProperties, setFeaturedProperties] = useState([]);
+  const [displayedFeaturedProperties, setDisplayedFeaturedProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedPropertyForModal, setSelectedPropertyForModal] = useState(null);
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [showFullscreenImage, setShowFullscreenImage] = useState(false);
+  
+  // Estados para paginación de propiedades destacadas
+  const [currentFeaturedPage, setCurrentFeaturedPage] = useState(1);
+  const [hasMoreFeatured, setHasMoreFeatured] = useState(false);
+  
+  // Constantes para paginación
+  const FEATURED_PER_PAGE = 9; // 3x3 grid para destacadas también
 
   useEffect(() => {
     loadFeaturedProperties();
@@ -23,12 +32,50 @@ const FeaturedProperties = () => {
       // Filtrar solo las propiedades destacadas
       const featured = allProperties.filter(property => property.destacado === true);
       
-      setFeaturedProperties(featured.slice(0, 3)); // Mostrar máximo 3 destacadas
+      setFeaturedProperties(featured);
+      
+      // Mostrar solo las primeras 9 propiedades destacadas
+      const initialFeatured = featured.slice(0, FEATURED_PER_PAGE);
+      setDisplayedFeaturedProperties(initialFeatured);
+      setHasMoreFeatured(featured.length > FEATURED_PER_PAGE);
+      setCurrentFeaturedPage(1);
     } catch (error) {
       console.error('Error cargando propiedades destacadas:', error);
       setFeaturedProperties([]);
+      setDisplayedFeaturedProperties([]);
+      setHasMoreFeatured(false);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMoreFeatured = async () => {
+    if (loadingMore || !hasMoreFeatured) return;
+    
+    setLoadingMore(true);
+    
+    try {
+      // Simular delay para mostrar loading
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const nextPage = currentFeaturedPage + 1;
+      const startIndex = currentFeaturedPage * FEATURED_PER_PAGE;
+      const endIndex = startIndex + FEATURED_PER_PAGE;
+      
+      const newFeatured = featuredProperties.slice(startIndex, endIndex);
+      
+      if (newFeatured.length > 0) {
+        setDisplayedFeaturedProperties(prev => [...prev, ...newFeatured]);
+        setCurrentFeaturedPage(nextPage);
+        
+        // Verificar si hay más propiedades destacadas
+        const totalLoaded = (nextPage * FEATURED_PER_PAGE);
+        setHasMoreFeatured(totalLoaded < featuredProperties.length);
+      }
+    } catch (error) {
+      console.error('Error cargando más propiedades destacadas:', error);
+    } finally {
+      setLoadingMore(false);
     }
   };
 
@@ -132,7 +179,7 @@ const FeaturedProperties = () => {
           </p>
         </div>
 
-        {featuredProperties.length === 0 ? (
+        {displayedFeaturedProperties.length === 0 && featuredProperties.length === 0 ? (
           <div className="no-featured-properties">
             <div className="no-properties-content">
               <i className="fas fa-star"></i>
@@ -147,12 +194,16 @@ const FeaturedProperties = () => {
         ) : (
           <>
             <div className="featured-grid">
-              {featuredProperties.map((property) => (
+              {displayedFeaturedProperties.map((property) => (
                 <div key={property.id} className="featured-card">
                   <div className="featured-image" onClick={() => handleImageClick(property)}>
                     {property.fotos && property.fotos.length > 0 ? (
                       <div className="property-image-container">
-                        <img src={property.fotos[0]} alt={property.titulo} />
+                        <img 
+                          src={property.fotos[0]} 
+                          alt={property.titulo}
+                          loading="lazy"
+                        />
                         {property.fotos.length > 1 && (
                           <div className="multiple-images-indicator">
                             <i className="fas fa-images"></i>
@@ -231,6 +282,37 @@ const FeaturedProperties = () => {
                 </div>
               ))}
             </div>
+
+            {/* Paginación para propiedades destacadas */}
+            {featuredProperties.length > FEATURED_PER_PAGE && (
+              <div className="featured-pagination">
+                {hasMoreFeatured && (
+                  <div className="load-more-featured">
+                    {loadingMore ? (
+                      <div className="loading-more">
+                        <div className="loading-spinner-small"></div>
+                        <span>Cargando más propiedades destacadas...</span>
+                      </div>
+                    ) : (
+                      <button 
+                        className="btn btn--outline load-more-btn"
+                        onClick={loadMoreFeatured}
+                      >
+                        <i className="fas fa-plus"></i>
+                        Cargar Más Destacadas
+                      </button>
+                    )}
+                  </div>
+                )}
+
+                {!hasMoreFeatured && displayedFeaturedProperties.length > 0 && (
+                  <div className="all-loaded">
+                    <i className="fas fa-check-circle"></i>
+                    <span>Todas las propiedades destacadas han sido cargadas</span>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="featured-cta">
               <p>¿Quieres ver todas nuestras propiedades?</p>
