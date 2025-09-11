@@ -118,12 +118,8 @@ const FeaturedProperties = () => {
     );
   }
 
-  if (featuredProperties.length === 0) {
-    return null; // No mostrar la sección si no hay propiedades destacadas
-  }
-
   return (
-    <section className="featured-properties-section">
+    <section id="featured-properties" className="featured-properties-section">
       <div className="container">
         <div className="section-header">
           <div className="section-badge">
@@ -136,99 +132,115 @@ const FeaturedProperties = () => {
           </p>
         </div>
 
-        <div className="featured-grid">
-          {featuredProperties.map((property) => (
-            <div key={property.id} className="featured-card">
-              <div className="featured-image" onClick={() => handleImageClick(property)}>
-                {property.fotos && property.fotos.length > 0 ? (
-                  <div className="property-image-container">
-                    <img src={property.fotos[0]} alt={property.titulo} />
-                    {property.fotos.length > 1 && (
-                      <div className="multiple-images-indicator">
-                        <i className="fas fa-images"></i>
-                        <span>{property.fotos.length}</span>
+        {featuredProperties.length === 0 ? (
+          <div className="no-featured-properties">
+            <div className="no-properties-content">
+              <i className="fas fa-star"></i>
+              <h3>Próximamente Propiedades Destacadas</h3>
+              <p>Estamos preparando las mejores oportunidades inmobiliarias para ti</p>
+              <a href="#properties" className="btn btn--primary">
+                <i className="fas fa-home"></i>
+                Ver Todas las Propiedades
+              </a>
+            </div>
+          </div>
+        ) : (
+          <>
+            <div className="featured-grid">
+              {featuredProperties.map((property) => (
+                <div key={property.id} className="featured-card">
+                  <div className="featured-image" onClick={() => handleImageClick(property)}>
+                    {property.fotos && property.fotos.length > 0 ? (
+                      <div className="property-image-container">
+                        <img src={property.fotos[0]} alt={property.titulo} />
+                        {property.fotos.length > 1 && (
+                          <div className="multiple-images-indicator">
+                            <i className="fas fa-images"></i>
+                            <span>{property.fotos.length}</span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="no-image">
+                        <i className="fas fa-image"></i>
                       </div>
                     )}
+                    
+                    <div className="featured-badge">
+                      <i className="fas fa-star"></i>
+                      <span>DESTACADA</span>
+                    </div>
+
+                    <div className="property-badges">
+                      <span className={`badge badge--${property.tipo}`}>
+                        {property.tipo}
+                      </span>
+                      <span className={`badge badge--${property.operacion}`}>
+                        {property.operacion}
+                      </span>
+                    </div>
                   </div>
-                ) : (
-                  <div className="no-image">
-                    <i className="fas fa-image"></i>
+
+                  <div className="featured-content">
+                    <h3 className="featured-title">{property.titulo}</h3>
+                    
+                    <p className="featured-location">
+                      <i className="fas fa-map-marker-alt"></i>
+                      {property.ubicacion}
+                    </p>
+
+                    <div className="featured-details">
+                      <div className="detail-item">
+                        <i className="fas fa-expand-arrows-alt"></i>
+                        <span>{property.area} m²</span>
+                      </div>
+                      <div className="detail-item">
+                        <i className="fas fa-bed"></i>
+                        <span>{property.habitaciones} hab</span>
+                      </div>
+                      <div className="detail-item">
+                        <i className="fas fa-bath"></i>
+                        <span>{property.banos} baños</span>
+                      </div>
+                    </div>
+
+                    <p className="featured-price">
+                      {formatPrice(property.precio)}
+                    </p>
+
+                    <div className="featured-actions">
+                      <button 
+                        className="btn btn--primary"
+                        onClick={() => handleWhatsAppClick(property)}
+                      >
+                        <i className="fab fa-whatsapp"></i>
+                        Consultar
+                      </button>
+                      
+                      {(property.video || property.videoUrl) && (
+                        <button 
+                          className="btn btn--outline"
+                          onClick={() => window.open(property.video || property.videoUrl, '_blank')}
+                        >
+                          <i className="fas fa-video"></i>
+                          Ver Video
+                        </button>
+                      )}
+                    </div>
                   </div>
-                )}
-                
-                <div className="featured-badge">
-                  <i className="fas fa-star"></i>
-                  <span>DESTACADA</span>
                 </div>
-
-                <div className="property-badges">
-                  <span className={`badge badge--${property.tipo}`}>
-                    {property.tipo}
-                  </span>
-                  <span className={`badge badge--${property.operacion}`}>
-                    {property.operacion}
-                  </span>
-                </div>
-              </div>
-
-              <div className="featured-content">
-                <h3 className="featured-title">{property.titulo}</h3>
-                
-                <p className="featured-location">
-                  <i className="fas fa-map-marker-alt"></i>
-                  {property.ubicacion}
-                </p>
-
-                <div className="featured-details">
-                  <div className="detail-item">
-                    <i className="fas fa-expand-arrows-alt"></i>
-                    <span>{property.area} m²</span>
-                  </div>
-                  <div className="detail-item">
-                    <i className="fas fa-bed"></i>
-                    <span>{property.habitaciones} hab</span>
-                  </div>
-                  <div className="detail-item">
-                    <i className="fas fa-bath"></i>
-                    <span>{property.banos} baños</span>
-                  </div>
-                </div>
-
-                <p className="featured-price">
-                  {formatPrice(property.precio)}
-                </p>
-
-                <div className="featured-actions">
-                  <button 
-                    className="btn btn--primary"
-                    onClick={() => handleWhatsAppClick(property)}
-                  >
-                    <i className="fab fa-whatsapp"></i>
-                    Consultar
-                  </button>
-                  
-                  {(property.video || property.videoUrl) && (
-                    <button 
-                      className="btn btn--outline"
-                      onClick={() => window.open(property.video || property.videoUrl, '_blank')}
-                    >
-                      <i className="fas fa-video"></i>
-                      Ver Video
-                    </button>
-                  )}
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        <div className="featured-cta">
-          <p>¿Quieres ver todas nuestras propiedades?</p>
-          <a href="#properties" className="btn btn--outline">
-            <i className="fas fa-home"></i>
-            Ver Todas las Propiedades
-          </a>
-        </div>
+            <div className="featured-cta">
+              <p>¿Quieres ver todas nuestras propiedades?</p>
+              <a href="#properties" className="btn btn--outline">
+                <i className="fas fa-home"></i>
+                Ver Todas las Propiedades
+              </a>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Modal de imágenes */}

@@ -50,8 +50,8 @@ const Header = () => {
             <ul className="nav__list">
               <li><button onClick={() => scrollToSection('about')}>Nosotros</button></li>
               <li><button onClick={() => scrollToSection('services')}>Servicios</button></li>
-              <li><button onClick={() => scrollToSection('why-choose-us')}>¿Por qué elegirnos?</button></li>
-              <li><button onClick={() => scrollToSection('testimonials')}>Testimonios</button></li>
+              <li><button onClick={() => scrollToSection('featured-properties')}>Propiedades Destacadas</button></li>
+              <li><button onClick={() => scrollToSection('properties')}>Nuestras Propiedades</button></li>
               <li><button onClick={() => scrollToSection('contact')}>Contacto</button></li>
             </ul>
           </nav>
@@ -82,8 +82,8 @@ const Header = () => {
             <ul className="mobile-nav__list">
               <li><button onClick={() => scrollToSection('about')}>Nosotros</button></li>
               <li><button onClick={() => scrollToSection('services')}>Servicios</button></li>
-              <li><button onClick={() => scrollToSection('why-choose-us')}>¿Por qué elegirnos?</button></li>
-              <li><button onClick={() => scrollToSection('testimonials')}>Testimonios</button></li>
+              <li><button onClick={() => scrollToSection('featured-properties')}>Propiedades Destacadas</button></li>
+              <li><button onClick={() => scrollToSection('properties')}>Nuestras Propiedades</button></li>
               <li><button onClick={() => scrollToSection('contact')}>Contacto</button></li>
             </ul>
           </nav>
