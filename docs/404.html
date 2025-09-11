@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Anphero Inmobiliaria - Tu propiedad vale más de lo que piensas" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo-anphero-official.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>Anphero Inmobiliaria</title>
+    <script type="text/javascript">
+        // Redirigir a index.html para manejar las rutas del lado del cliente
+        var pathSegmentsToKeep = 0;
+        var l = window.location;
+        l.replace(
+            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
+            l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
+            l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+            l.hash
+        );
+    </script>
+</head>
+<body>
+    <noscript>Necesitas habilitar JavaScript para ejecutar esta aplicación.</noscript>
+    <div id="root"></div>
+</body>
+</html>
