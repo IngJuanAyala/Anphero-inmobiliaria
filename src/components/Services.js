@@ -103,14 +103,14 @@ const Services = () => {
             <div className="highlight__house-tour">
               <div className="house-tour__image">
                 <img 
-                  src="/services-highlight.jpg" 
+                  src={`${process.env.PUBLIC_URL}/images/services-highlight.jpg`}
                   alt="House Tour Profesional Anphero" 
                   className="house-tour__img"
                 />
                 <div className="house-tour__overlay">
                   <div className="overlay__content">
                     <div className="overlay__header">
-                      <img src="/logo-anphero-official.png" alt="Anphero" className="overlay__logo" />
+                      <img src={`${process.env.PUBLIC_URL}/logo-anphero-official.png`} alt="Anphero" className="overlay__logo" />
                       <span>Servicios Anphero</span>
                     </div>
                     <h4>House Tour Profesional</h4>
