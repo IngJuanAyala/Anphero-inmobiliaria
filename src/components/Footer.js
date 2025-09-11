@@ -18,7 +18,7 @@ const Footer = () => {
           <div className="footer__main">
             <div className="footer__brand">
               <div className="footer__logo">
-                <img src="./logo-anphero-official.png" alt="Anphero Inmobiliaria" className="footer-logo__image" />
+                <img src="/Anphero-inmobiliaria/logo-anphero-official.png" alt="Anphero Inmobiliaria" className="footer-logo__image" />
                 <div className="footer-logo__text">
                   <h3>ANPHERO</h3>
                   <span>Inmobiliaria</span>

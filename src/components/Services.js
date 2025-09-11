@@ -110,7 +110,7 @@ const Services = () => {
                 <div className="house-tour__overlay">
                   <div className="overlay__content">
                     <div className="overlay__header">
-                      <img src="./logo-anphero-official.png" alt="Anphero" className="overlay__logo" />
+                      <img src="/Anphero-inmobiliaria/logo-anphero-official.png" alt="Anphero" className="overlay__logo" />
                       <span>Servicios Anphero</span>
                     </div>
                     <h4>House Tour Profesional</h4>

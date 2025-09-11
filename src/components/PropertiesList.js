@@ -160,7 +160,7 @@ const PropertiesList = () => {
   }
 
   return (
-    <section className="properties-list-section">
+    <section id="properties" className="properties-list-section">
       <div className="container">
         <div className="section-header">
           <h2 className="section-title">Nuestras Propiedades</h2>

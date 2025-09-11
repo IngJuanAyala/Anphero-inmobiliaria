@@ -260,9 +260,25 @@
         }
       }
 
+
       i {
         font-size: 1.1rem;
       }
+    }
+  }
+
+  &__inline-link {
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: 600;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+
+    &:hover {
+      color: #ffed4e;
+      border-bottom-color: #ffd700;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
     }
   }
 
