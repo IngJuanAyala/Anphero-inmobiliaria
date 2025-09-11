@@ -26,7 +26,9 @@ export const analytics = getAnalytics(app);
 
 devLog('Firebase configurado:', {
   projectId: firebaseConfig.projectId,
-  environment: process.env.NODE_ENV
+  environment: process.env.NODE_ENV,
+  apiKey: firebaseConfig.apiKey ? 'Configurado' : 'NO CONFIGURADO',
+  authDomain: firebaseConfig.authDomain ? 'Configurado' : 'NO CONFIGURADO'
 });
 
 // Configuración para desarrollo local

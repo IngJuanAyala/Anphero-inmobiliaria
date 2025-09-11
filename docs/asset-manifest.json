@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/Anphero-inmobiliaria/static/css/main.949dbec6.css",
-    "main.js": "/Anphero-inmobiliaria/static/js/main.85721bfd.js",
+    "main.js": "/Anphero-inmobiliaria/static/js/main.b2229575.js",
     "index.html": "/Anphero-inmobiliaria/index.html",
     "main.949dbec6.css.map": "/Anphero-inmobiliaria/static/css/main.949dbec6.css.map",
-    "main.85721bfd.js.map": "/Anphero-inmobiliaria/static/js/main.85721bfd.js.map"
+    "main.b2229575.js.map": "/Anphero-inmobiliaria/static/js/main.b2229575.js.map"
   },
   "entrypoints": [
     "static/css/main.949dbec6.css",
-    "static/js/main.85721bfd.js"
+    "static/js/main.b2229575.js"
   ]
 }
