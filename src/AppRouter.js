@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -35,6 +35,18 @@ const HomePage = () => {
 
 const AppContent = () => {
   const location = useLocation();
+
+  // Manejar la redirección de GitHub Pages
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path.includes('/?/')) {
+      const newPath = path.split('/?/')[1];
+      if (newPath) {
+        window.history.replaceState(null, '', newPath);
+        window.location.reload();
+      }
+    }
+  }, []);
 
   const shouldShowHeader = !location.pathname.startsWith('/admin');
   
