@@ -72,7 +72,7 @@ const AppContent = () => {
 // Componente principal con rutas
 const AppRouter = () => {
   return (
-    <Router basename="/Anphero-inmobiliaria">
+    <Router basename="/Amphero-inmobiliaria">
       <AppContent />
     </Router>
   );
