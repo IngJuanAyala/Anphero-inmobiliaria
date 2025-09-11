@@ -18,7 +18,7 @@ function App() {
       <div className="loading-screen">
         <div className="loading-content">
           <div className="logo-container">
-            <img src="/logo-anphero-official.png" alt="Anphero Inmobiliaria" className="loading-logo" />
+            <img src={`${process.env.PUBLIC_URL}/logo-anphero-official.png`} alt="Anphero Inmobiliaria" className="loading-logo" />
             <div className="logo-text">
               <h1>ANPHERO</h1>
               <p>Inmobiliaria</p>
