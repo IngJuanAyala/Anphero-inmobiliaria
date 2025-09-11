@@ -37,7 +37,7 @@ const Header = () => {
           {/* Logo */}
           <div className="header__logo" onClick={() => scrollToSection('hero')}>
             <div className="logo">
-              <img src="./logo-anphero-official.png" alt="Anphero Inmobiliaria" className="logo__image" />
+              <img src="/Anphero-inmobiliaria/logo-anphero-official.png" alt="Anphero Inmobiliaria" className="logo__image" />
               <div className="logo__text">
                 <h1>ANPHERO</h1>
                 <span>Inmobiliaria</span>
