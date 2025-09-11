@@ -71,8 +71,11 @@ const AppContent = () => {
 
 // Componente principal con rutas
 const AppRouter = () => {
+  // Solo usar basename en producción
+  const basename = process.env.NODE_ENV === 'production' ? '/Anphero-inmobiliaria' : '';
+  
   return (
-    <Router basename="/Anphero-inmobiliaria">
+    <Router basename={basename}>
       <AppContent />
     </Router>
   );

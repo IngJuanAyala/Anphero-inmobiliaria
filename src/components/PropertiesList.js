@@ -5,20 +5,54 @@ import './PropertiesList.scss';
 
 const PropertiesList = () => {
   const [properties, setProperties] = useState([]);
+  const [displayedProperties, setDisplayedProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [activeFilter, setActiveFilter] = useState('todas');
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedPropertyForModal, setSelectedPropertyForModal] = useState(null);
   const [modalImageIndex, setModalImageIndex] = useState(0);
   const [showFullscreenImage, setShowFullscreenImage] = useState(false);
+  
+  // Estados para paginación y scroll infinito
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMoreProperties, setHasMoreProperties] = useState(false);
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  
+  // Constantes para paginación
+  const PROPERTIES_PER_PAGE = 9; // 3x3 grid
+  const SCROLL_THRESHOLD = 200; // Píxeles desde el final para cargar más
 
   useEffect(() => {
-    loadProperties();
+    loadProperties(true); // true = reset pagination
   }, [activeFilter]);
 
-  const loadProperties = async () => {
-    setLoading(true);
+  useEffect(() => {
+    // Agregar listener de scroll para infinite scroll
+    const handleScroll = () => {
+      if (hasMoreProperties && !loadingMore) {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.documentElement.scrollHeight;
+        
+        if (scrollTop + windowHeight >= documentHeight - SCROLL_THRESHOLD) {
+          loadMoreProperties();
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasMoreProperties, loadingMore]);
+
+  const loadProperties = async (resetPagination = false) => {
+    if (resetPagination) {
+      setLoading(true);
+      setCurrentPage(1);
+      setIsInitialLoad(true);
+    }
+    
     try {
       devLog('Cargando propiedades...');
       // Siempre obtener todas las propiedades primero
@@ -52,12 +86,55 @@ const PropertiesList = () => {
       });
 
       setProperties(sortedProperties);
+      
+      if (resetPagination) {
+        // Mostrar solo las primeras 9 propiedades
+        const initialProperties = sortedProperties.slice(0, PROPERTIES_PER_PAGE);
+        setDisplayedProperties(initialProperties);
+        setHasMoreProperties(sortedProperties.length > PROPERTIES_PER_PAGE);
+        setIsInitialLoad(false);
+      }
+      
       devLog('Propiedades filtradas y ordenadas:', sortedProperties.length);
     } catch (error) {
       console.error('Error cargando propiedades:', error);
       setProperties([]);
+      setDisplayedProperties([]);
+      setHasMoreProperties(false);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadMoreProperties = async () => {
+    if (loadingMore || !hasMoreProperties) return;
+    
+    setLoadingMore(true);
+    
+    try {
+      // Simular delay para mostrar loading (opcional)
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      const nextPage = currentPage + 1;
+      const startIndex = currentPage * PROPERTIES_PER_PAGE;
+      const endIndex = startIndex + PROPERTIES_PER_PAGE;
+      
+      const newProperties = properties.slice(startIndex, endIndex);
+      
+      if (newProperties.length > 0) {
+        setDisplayedProperties(prev => [...prev, ...newProperties]);
+        setCurrentPage(nextPage);
+        
+        // Verificar si hay más propiedades
+        const totalLoaded = (nextPage * PROPERTIES_PER_PAGE);
+        setHasMoreProperties(totalLoaded < properties.length);
+        
+        devLog(`Cargadas ${newProperties.length} propiedades más. Total mostradas: ${displayedProperties.length + newProperties.length}`);
+      }
+    } catch (error) {
+      console.error('Error cargando más propiedades:', error);
+    } finally {
+      setLoadingMore(false);
     }
   };
 
@@ -195,15 +272,17 @@ const PropertiesList = () => {
             </div>
           </div>
         ) : (
-          <div className="properties-grid">
-            {properties.map((property) => (
+          <>
+            <div className="properties-grid">
+              {displayedProperties.map((property) => (
               <div key={property.id} className="property-card">
                 <div className="property-image">
                   {property.fotos && property.fotos.length > 0 ? (
                     <div className="property-image-container" onClick={() => handleImageClick(property)}>
                       <img 
                         src={property.fotos[0]} 
-                        alt={property.titulo} 
+                        alt={property.titulo}
+                        loading="lazy"
                       />
                       {property.fotos.length > 1 && (
                         <div className="multiple-images-indicator">
@@ -272,7 +351,37 @@ const PropertiesList = () => {
                 </div>
               </div>
             ))}
-          </div>
+            </div>
+
+            {/* Indicadores de paginación y loading */}
+            <div className="pagination-info">
+              {hasMoreProperties && (
+                <div className="load-more-section">
+                  {loadingMore ? (
+                    <div className="loading-more">
+                      <div className="loading-spinner-small"></div>
+                      <span>Cargando más propiedades...</span>
+                    </div>
+                  ) : (
+                    <button 
+                      className="btn btn--outline load-more-btn"
+                      onClick={loadMoreProperties}
+                    >
+                      <i className="fas fa-plus"></i>
+                      Cargar Más Propiedades
+                    </button>
+                  )}
+                </div>
+              )}
+
+              {!hasMoreProperties && displayedProperties.length > 0 && (
+                <div className="all-loaded">
+                  <i className="fas fa-check-circle"></i>
+                  <span>Todas las propiedades han sido cargadas</span>
+                </div>
+              )}
+            </div>
+          </>
         )}
 
         <div className="cta-section">

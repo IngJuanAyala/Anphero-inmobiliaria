@@ -103,7 +103,7 @@ const Services = () => {
             <div className="highlight__house-tour">
               <div className="house-tour__image">
                 <img 
-                  src="/images/services-highlight.jpg" 
+                  src="/services-highlight.jpg" 
                   alt="House Tour Profesional Anphero" 
                   className="house-tour__img"
                 />
