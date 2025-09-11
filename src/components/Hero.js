@@ -74,7 +74,16 @@ const Hero = () => {
               <p className={`hero__description ${isVisible ? 'hero__description--visible' : ''}`}>
                 Somos expertos en maximizar el valor de tu propiedad. Con nuestra estrategia 
                 personalizada y tecnología avanzada, conseguimos los mejores precios del mercado 
-                en tiempo récord.
+                en tiempo récord. <a 
+                  href="#featured-properties" 
+                  className="hero__inline-link"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToSection('featured-properties');
+                  }}
+                >
+                  Descubre nuestras propiedades destacadas
+                </a> y encuentra la oportunidad perfecta.
               </p>
               
               <div className={`hero__stats ${isVisible ? 'hero__stats--visible' : ''}`}>
@@ -92,10 +101,10 @@ const Hero = () => {
               <div className={`hero__cta ${isVisible ? 'hero__cta--visible' : ''}`}>
                 <button 
                   className="btn btn--primary hero__cta-primary"
-                  onClick={() => scrollToSection('contact')}
+                  onClick={() => scrollToSection('featured-properties')}
                 >
-                  <i className="fas fa-phone"></i>
-                  Evaluación Gratuita
+                  <i className="fas fa-star"></i>
+                  Ver Propiedades Destacadas
                 </button>
                 <button 
                   className="btn btn--outline hero__cta-secondary"
